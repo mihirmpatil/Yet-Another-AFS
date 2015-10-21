@@ -1,0 +1,5 @@
+1) Create a structure for file attributes
+2) Prefer going for array of characters instead of strings for file transfer
+3) Decide how to store the metadata in the local cache
+4) Testing could be done with driver at cpp client and server to test out all the features
+5) Fuse layer can be built over it
