@@ -55,10 +55,18 @@ using afs::AFS;
 class AFSServiceImpl final : public AFS::Service {
   Status afs_open(ServerContext* context, const Request* request,
                  ServerWriter<Reply>* writer) override {
-    std::string path = request->name();
+    
+		
+		Reply reply;
+		std::string path = request->name();
+		std::cout << "in afs_open for " << path << std::endl;
+		for (int i = 0; i < 10; i++) {
+			reply.set_data(path);
+			writer->Write(reply);
+		}
+		/*
 		std::ifstream file_stream;
 		//std::string& buffer;
-		Reply reply;
 		char *buffer = new char [BUF_LEN];
 		file_stream.open(path);
 		while (!file_stream.eof()) {
@@ -68,6 +76,7 @@ class AFSServiceImpl final : public AFS::Service {
 			writer->Write(reply);
 		}
 		file_stream.close();
+		*/
     return Status::OK;
   }
 };

@@ -77,7 +77,8 @@ class AFSClient {
     while (reader->Read(&reply)) {
       //TODO think about handling metadata(maybe perform a separate rpc call)
       //save the file locally
-      file_stream << reply.data();
+      //file_stream << reply.data();
+			std::cout << reply.data() << std::endl;
     }
 
     Status status = reader->Finish();

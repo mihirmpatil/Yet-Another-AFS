@@ -29,5 +29,6 @@ static struct fuse_operations afs_oper = {
 };
 
 int main(int argc, char *argv[]) {
+	grpc_afs_open("fsd");
   return fuse_main(argc, argv, &afs_oper, NULL);
 }

@@ -48,24 +48,14 @@ all:	system-check afs_server afs_fuse_client
 afs_server:	afs.pb.o afs.grpc.pb.o afs_server.o
 	$(CXX) $^ $(LDFLAGS) -o $@
 
-afs_fuse_client:	afs.pb.o afs.grpc.pb.o afs_client.o afs_fuse_client.o
+afs_fuse_client:	afs.pb.o afs.grpc.pb.o afs_client.o 
 	gcc -c afs_fuse_client.c $(FUSEFLAGS)
-	$(CXX) $^ $(LDFLAGS) $(FUSEFLAGS) -o $@
+	g++ afs_fuse_client.o afs_client.o afs.grpc.pb.o afs.pb.o -L/usr/local/lib -lgrpc++_unsecure -lgrpc -lgpr -lprotobuf -lpthread -ldl -lfuse -D_FILE_OFFSET_BITS=64 -o afs_fuse_client
+#$(CXX) $^ $(LDFLAGS) $(FUSEFLAGS) -o $@
 
 afs_fuse_obj:	
 	gcc -c afs_fuse_client.c $(FUSEFLAGS)
 
-greeter_client: helloworld.pb.o helloworld.grpc.pb.o greeter_client.o
-	$(CXX) $^ $(LDFLAGS) -o $@
-
-greeter_server: helloworld.pb.o helloworld.grpc.pb.o greeter_server.o
-	$(CXX) $^ $(LDFLAGS) -o $@
-
-greeter_async_client: helloworld.pb.o helloworld.grpc.pb.o greeter_async_client.o
-	$(CXX) $^ $(LDFLAGS) -o $@
-
-greeter_async_server: helloworld.pb.o helloworld.grpc.pb.o greeter_async_server.o
-	$(CXX) $^ $(LDFLAGS) -o $@
 
 %.grpc.pb.cc: %.proto
 	$(PROTOC) -I $(PROTOS_PATH) --grpc_out=. --plugin=protoc-gen-grpc=$(GRPC_CPP_PLUGIN_PATH) $<
@@ -73,8 +63,8 @@ greeter_async_server: helloworld.pb.o helloworld.grpc.pb.o greeter_async_server.
 %.pb.cc: %.proto
 	$(PROTOC) -I $(PROTOS_PATH) --cpp_out=. $<
 
-trial: trial.c greeter_client.o
-	$(CXX) $^ $(LDFLAGS) -o $@
+tester: test_open.c
+	gcc test_open.c -o test_open	
 
 clean:
 	rm -f *.o afs_server afs_fuse_client 
