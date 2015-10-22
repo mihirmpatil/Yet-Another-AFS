@@ -60,11 +60,7 @@ class AFSServiceImpl final : public AFS::Service {
 		Reply reply;
 		std::string path = request->name();
 		std::cout << "in afs_open for " << path << std::endl;
-		for (int i = 0; i < 10; i++) {
-			reply.set_data(path);
-			writer->Write(reply);
-		}
-		/*
+		
 		std::ifstream file_stream;
 		//std::string& buffer;
 		char *buffer = new char [BUF_LEN];
@@ -76,7 +72,7 @@ class AFSServiceImpl final : public AFS::Service {
 			writer->Write(reply);
 		}
 		file_stream.close();
-		*/
+		
     return Status::OK;
   }
 };

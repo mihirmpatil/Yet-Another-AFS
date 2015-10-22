@@ -16,6 +16,7 @@ static int afs_open(const char *path, struct fuse_file_info *fi)
   // check if local file exists
   // check if the local file is the updated version as the server
   // if not exists or not updated make grpc call
+	printf("In afs_open inside fuse client\n");
   grpc_afs_open(path);
   // save file locally - handle this in grpc client itself to avoid passing data here
   return SUCCESS;
@@ -29,6 +30,6 @@ static struct fuse_operations afs_oper = {
 };
 
 int main(int argc, char *argv[]) {
-	grpc_afs_open("fsd");
+	grpc_afs_open("random_file");
   return fuse_main(argc, argv, &afs_oper, NULL);
 }

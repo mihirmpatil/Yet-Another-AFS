@@ -72,6 +72,7 @@ class AFSClient {
     file_stream.open(path);
 
     // The actual RPC.
+		std::cout << "The actual GRPC" << std::endl;
 //    Status status = stub_->afs_open(&context, request, &reply);
     std::unique_ptr<ClientReader<Reply>> reader(stub_->afs_open(&context, request));
     while (reader->Read(&reply)) {
@@ -99,6 +100,7 @@ class AFSClient {
 
 extern "C" int grpc_afs_open(const char *path)
 {
+	std::cout << "In exported open implementation " << std::endl;
   AFSClient client(
       grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
   //std::string path("world");
