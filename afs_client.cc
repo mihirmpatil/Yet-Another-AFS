@@ -39,6 +39,7 @@
 #include <grpc++/grpc++.h>
 
 #include "afs.grpc.pb.h"
+#include "afs_fuse_structs.h"
 
 using grpc::Channel;
 using grpc::ClientContext;
@@ -46,6 +47,8 @@ using grpc::ClientReader;
 using grpc::Status;
 using afs::Request;
 using afs::Reply;
+using afs::Dirent;
+using afs::DirentReply;
 using afs::AFS;
 
 class AFSClient {
@@ -93,18 +96,45 @@ class AFSClient {
     }
   }
 
+	//Think about the return value here
+	struct afs_dirent* afs_readdir(const std::string& path) {
+	
+		Request request;
+		request.set_name(path);
+		DirentReply dirent_reply;
+		ClientContext context;
+		struct afs_dirent *dirent_arr;
+
+		Status status = stub_->afs_readdir(&context, request, &dirent_reply);
+		int dirent_count = dirent_reply->count();
+		dirent_arr = (struct afs_dirent*)malloc(count*sizeof(struct afs_dirent));
+		for (int i = 0; i < dirent_count; i++) {
+			strcpy(dirent_arr[i].name, dirent_reply->mutable_dirent(i)->name()); 
+			dirent_arr[i].reclen = dirent_reply->mutable_dirent(i)->reclen();
+			dirent_arr[i].d_type = dirent_reply->mutable_dirent(i)->d_type();
+		}
+
+		return dirent_arr;
+	}
+
  private:
   std::unique_ptr<AFS::Stub> stub_;
 };
 
 
-extern "C" int grpc_afs_open(const char *path)
-{
+extern "C" int grpc_afs_open(const char *path) {
 	std::cout << "In exported open implementation " << std::endl;
   AFSClient client(
       grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
-  //std::string path("world");
   std::string r = client.afs_open(path);
   std::cout << r << std::endl;
   return 0;
 }
+
+extern "C" struct afs_dirent* grpc_afs_readdir(const char *path) {
+  AFSClient client(
+      grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+  struct afs_dirent *r = client.afs_readdir(path);
+	return r;
+}
+

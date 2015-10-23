@@ -36,8 +36,11 @@ void protobuf_AddDesc_afs_2eproto();
 void protobuf_AssignDesc_afs_2eproto();
 void protobuf_ShutdownFile_afs_2eproto();
 
+class Dirent;
+class DirentReply;
 class Reply;
 class Request;
+class Stat;
 
 // ===================================================================
 
@@ -205,6 +208,293 @@ class Reply : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static Reply* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class Stat : public ::google::protobuf::Message {
+ public:
+  Stat();
+  virtual ~Stat();
+
+  Stat(const Stat& from);
+
+  inline Stat& operator=(const Stat& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Stat& default_instance();
+
+  void Swap(Stat* other);
+
+  // implements Message ----------------------------------------------
+
+  inline Stat* New() const { return New(NULL); }
+
+  Stat* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Stat& from);
+  void MergeFrom(const Stat& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(Stat* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int64 size = 1;
+  void clear_size();
+  static const int kSizeFieldNumber = 1;
+  ::google::protobuf::int64 size() const;
+  void set_size(::google::protobuf::int64 value);
+
+  // optional int64 a_time = 2;
+  void clear_a_time();
+  static const int kATimeFieldNumber = 2;
+  ::google::protobuf::int64 a_time() const;
+  void set_a_time(::google::protobuf::int64 value);
+
+  // optional int64 m_time = 3;
+  void clear_m_time();
+  static const int kMTimeFieldNumber = 3;
+  ::google::protobuf::int64 m_time() const;
+  void set_m_time(::google::protobuf::int64 value);
+
+  // optional int64 c_time = 4;
+  void clear_c_time();
+  static const int kCTimeFieldNumber = 4;
+  ::google::protobuf::int64 c_time() const;
+  void set_c_time(::google::protobuf::int64 value);
+
+  // @@protoc_insertion_point(class_scope:afs.Stat)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::int64 size_;
+  ::google::protobuf::int64 a_time_;
+  ::google::protobuf::int64 m_time_;
+  ::google::protobuf::int64 c_time_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_afs_2eproto();
+  friend void protobuf_AssignDesc_afs_2eproto();
+  friend void protobuf_ShutdownFile_afs_2eproto();
+
+  void InitAsDefaultInstance();
+  static Stat* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Dirent : public ::google::protobuf::Message {
+ public:
+  Dirent();
+  virtual ~Dirent();
+
+  Dirent(const Dirent& from);
+
+  inline Dirent& operator=(const Dirent& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Dirent& default_instance();
+
+  void Swap(Dirent* other);
+
+  // implements Message ----------------------------------------------
+
+  inline Dirent* New() const { return New(NULL); }
+
+  Dirent* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Dirent& from);
+  void MergeFrom(const Dirent& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(Dirent* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional string name = 1;
+  void clear_name();
+  static const int kNameFieldNumber = 1;
+  const ::std::string& name() const;
+  void set_name(const ::std::string& value);
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  ::std::string* mutable_name();
+  ::std::string* release_name();
+  void set_allocated_name(::std::string* name);
+
+  // optional int32 reclen = 2;
+  void clear_reclen();
+  static const int kReclenFieldNumber = 2;
+  ::google::protobuf::int32 reclen() const;
+  void set_reclen(::google::protobuf::int32 value);
+
+  // optional int32 d_type = 3;
+  void clear_d_type();
+  static const int kDTypeFieldNumber = 3;
+  ::google::protobuf::int32 d_type() const;
+  void set_d_type(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:afs.Dirent)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::internal::ArenaStringPtr name_;
+  ::google::protobuf::int32 reclen_;
+  ::google::protobuf::int32 d_type_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_afs_2eproto();
+  friend void protobuf_AssignDesc_afs_2eproto();
+  friend void protobuf_ShutdownFile_afs_2eproto();
+
+  void InitAsDefaultInstance();
+  static Dirent* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class DirentReply : public ::google::protobuf::Message {
+ public:
+  DirentReply();
+  virtual ~DirentReply();
+
+  DirentReply(const DirentReply& from);
+
+  inline DirentReply& operator=(const DirentReply& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const DirentReply& default_instance();
+
+  void Swap(DirentReply* other);
+
+  // implements Message ----------------------------------------------
+
+  inline DirentReply* New() const { return New(NULL); }
+
+  DirentReply* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const DirentReply& from);
+  void MergeFrom(const DirentReply& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(DirentReply* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 count = 1;
+  void clear_count();
+  static const int kCountFieldNumber = 1;
+  ::google::protobuf::int32 count() const;
+  void set_count(::google::protobuf::int32 value);
+
+  // repeated .afs.Dirent dirent = 2;
+  int dirent_size() const;
+  void clear_dirent();
+  static const int kDirentFieldNumber = 2;
+  const ::afs::Dirent& dirent(int index) const;
+  ::afs::Dirent* mutable_dirent(int index);
+  ::afs::Dirent* add_dirent();
+  ::google::protobuf::RepeatedPtrField< ::afs::Dirent >*
+      mutable_dirent();
+  const ::google::protobuf::RepeatedPtrField< ::afs::Dirent >&
+      dirent() const;
+
+  // @@protoc_insertion_point(class_scope:afs.DirentReply)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::RepeatedPtrField< ::afs::Dirent > dirent_;
+  ::google::protobuf::int32 count_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_afs_2eproto();
+  friend void protobuf_AssignDesc_afs_2eproto();
+  friend void protobuf_ShutdownFile_afs_2eproto();
+
+  void InitAsDefaultInstance();
+  static DirentReply* default_instance_;
+};
 // ===================================================================
 
 
@@ -303,7 +593,196 @@ inline void Reply::set_allocated_data(::std::string* data) {
   // @@protoc_insertion_point(field_set_allocated:afs.Reply.data)
 }
 
+// -------------------------------------------------------------------
+
+// Stat
+
+// optional int64 size = 1;
+inline void Stat::clear_size() {
+  size_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 Stat::size() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.size)
+  return size_;
+}
+inline void Stat::set_size(::google::protobuf::int64 value) {
+  
+  size_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.size)
+}
+
+// optional int64 a_time = 2;
+inline void Stat::clear_a_time() {
+  a_time_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 Stat::a_time() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.a_time)
+  return a_time_;
+}
+inline void Stat::set_a_time(::google::protobuf::int64 value) {
+  
+  a_time_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.a_time)
+}
+
+// optional int64 m_time = 3;
+inline void Stat::clear_m_time() {
+  m_time_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 Stat::m_time() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.m_time)
+  return m_time_;
+}
+inline void Stat::set_m_time(::google::protobuf::int64 value) {
+  
+  m_time_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.m_time)
+}
+
+// optional int64 c_time = 4;
+inline void Stat::clear_c_time() {
+  c_time_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 Stat::c_time() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.c_time)
+  return c_time_;
+}
+inline void Stat::set_c_time(::google::protobuf::int64 value) {
+  
+  c_time_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.c_time)
+}
+
+// -------------------------------------------------------------------
+
+// Dirent
+
+// optional string name = 1;
+inline void Dirent::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Dirent::name() const {
+  // @@protoc_insertion_point(field_get:afs.Dirent.name)
+  return name_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Dirent::set_name(const ::std::string& value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:afs.Dirent.name)
+}
+inline void Dirent::set_name(const char* value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:afs.Dirent.name)
+}
+inline void Dirent::set_name(const char* value, size_t size) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:afs.Dirent.name)
+}
+inline ::std::string* Dirent::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:afs.Dirent.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Dirent::release_name() {
+  
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Dirent::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:afs.Dirent.name)
+}
+
+// optional int32 reclen = 2;
+inline void Dirent::clear_reclen() {
+  reclen_ = 0;
+}
+inline ::google::protobuf::int32 Dirent::reclen() const {
+  // @@protoc_insertion_point(field_get:afs.Dirent.reclen)
+  return reclen_;
+}
+inline void Dirent::set_reclen(::google::protobuf::int32 value) {
+  
+  reclen_ = value;
+  // @@protoc_insertion_point(field_set:afs.Dirent.reclen)
+}
+
+// optional int32 d_type = 3;
+inline void Dirent::clear_d_type() {
+  d_type_ = 0;
+}
+inline ::google::protobuf::int32 Dirent::d_type() const {
+  // @@protoc_insertion_point(field_get:afs.Dirent.d_type)
+  return d_type_;
+}
+inline void Dirent::set_d_type(::google::protobuf::int32 value) {
+  
+  d_type_ = value;
+  // @@protoc_insertion_point(field_set:afs.Dirent.d_type)
+}
+
+// -------------------------------------------------------------------
+
+// DirentReply
+
+// optional int32 count = 1;
+inline void DirentReply::clear_count() {
+  count_ = 0;
+}
+inline ::google::protobuf::int32 DirentReply::count() const {
+  // @@protoc_insertion_point(field_get:afs.DirentReply.count)
+  return count_;
+}
+inline void DirentReply::set_count(::google::protobuf::int32 value) {
+  
+  count_ = value;
+  // @@protoc_insertion_point(field_set:afs.DirentReply.count)
+}
+
+// repeated .afs.Dirent dirent = 2;
+inline int DirentReply::dirent_size() const {
+  return dirent_.size();
+}
+inline void DirentReply::clear_dirent() {
+  dirent_.Clear();
+}
+inline const ::afs::Dirent& DirentReply::dirent(int index) const {
+  // @@protoc_insertion_point(field_get:afs.DirentReply.dirent)
+  return dirent_.Get(index);
+}
+inline ::afs::Dirent* DirentReply::mutable_dirent(int index) {
+  // @@protoc_insertion_point(field_mutable:afs.DirentReply.dirent)
+  return dirent_.Mutable(index);
+}
+inline ::afs::Dirent* DirentReply::add_dirent() {
+  // @@protoc_insertion_point(field_add:afs.DirentReply.dirent)
+  return dirent_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::afs::Dirent >*
+DirentReply::mutable_dirent() {
+  // @@protoc_insertion_point(field_mutable_list:afs.DirentReply.dirent)
+  return &dirent_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::afs::Dirent >&
+DirentReply::dirent() const {
+  // @@protoc_insertion_point(field_list:afs.DirentReply.dirent)
+  return dirent_;
+}
+
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 

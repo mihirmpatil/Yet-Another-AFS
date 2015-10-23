@@ -38,6 +38,8 @@ package afs;
 service AFS {
   // Sends multiple greetings
   rpc afs_open (Request) returns (stream Reply) {}
+  rpc afs_getattr (Request) returns (Stat) {}
+  rpc afs_readdir (Request) returns (DirentReply) {}
 }
 
 // The request message containing the user's name and how many greetings
@@ -62,4 +64,9 @@ message Dirent {
 	string name = 1;
 	int32 reclen = 2;
 	int32 d_type = 3;	//type of file
+}
+
+message DirentReply {
+	int32 count = 1;
+	repeated Dirent dirent = 2;
 }

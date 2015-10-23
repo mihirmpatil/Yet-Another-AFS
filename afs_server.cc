@@ -39,6 +39,8 @@
 #include <grpc++/grpc++.h>
 
 #include "afs.grpc.pb.h"
+#include "dirent.h"
+#include "sys/stat.h"
 
 #define BUF_LEN 1024
 
@@ -49,6 +51,8 @@ using grpc::ServerWriter;
 using grpc::Status;
 using afs::Request;
 using afs::Reply;
+using afs::DirentReply;
+using afs::Dirent;
 using afs::AFS;
 
 // Logic and data behind the server's behavior.
@@ -75,6 +79,41 @@ class AFSServiceImpl final : public AFS::Service {
 		
     return Status::OK;
   }
+
+	Status afs_readdir(ServerContext* context, const Request* request,
+									DirentReply* response) override {
+		
+		std::string path = request->name();
+		DIR *dp;
+		struct dirent *de;
+		//(void) offset;
+		//(void) fi;
+		dp = opendir((char*)path);
+		//if (dp == NULL)
+		//	return -errno;
+		int count = 0;
+		void *buf;
+		while ((de = readdir(dp)) != NULL) {
+			struct stat st;
+			memset(&st, 0, sizeof(st));
+			st.st_ino = de->d_ino;
+			st.st_mode = de->d_type << 12;
+
+		  Dirent dirent;
+			dirent.set_name(de->d_name);
+			dirent.set_reclen(de->d_reclen);
+			dirent.set_d_type(de->d_type);
+			response->add_dirent(dirent);
+			count++;
+
+			if (filler(buf, de->d_name, &st, 0))
+				break;
+		}
+		response->set_count(count);
+		closedir(dp);
+		
+		return Status::OK;
+	}
 };
 
 void RunServer() {
