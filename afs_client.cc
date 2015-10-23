@@ -106,14 +106,13 @@ class AFSClient {
 		struct afs_dirent *dirent_arr;
 
 		Status status = stub_->afs_readdir(&context, request, &dirent_reply);
-		int dirent_count = dirent_reply->count();
-		dirent_arr = (struct afs_dirent*)malloc(count*sizeof(struct afs_dirent));
+		int dirent_count = dirent_reply.count();
+		dirent_arr = (struct afs_dirent*)malloc(dirent_count*sizeof(struct afs_dirent));
 		for (int i = 0; i < dirent_count; i++) {
-			strcpy(dirent_arr[i].name, dirent_reply->mutable_dirent(i)->name()); 
-			dirent_arr[i].reclen = dirent_reply->mutable_dirent(i)->reclen();
-			dirent_arr[i].d_type = dirent_reply->mutable_dirent(i)->d_type();
+			strcpy(dirent_arr[i].name, dirent_reply.mutable_dirent(i)->name().c_str()); 
+			dirent_arr[i].reclen = dirent_reply.mutable_dirent(i)->reclen();
+			dirent_arr[i].d_type = dirent_reply.mutable_dirent(i)->d_type();
 		}
-
 		return dirent_arr;
 	}
 

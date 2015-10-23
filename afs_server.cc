@@ -88,26 +88,22 @@ class AFSServiceImpl final : public AFS::Service {
 		struct dirent *de;
 		//(void) offset;
 		//(void) fi;
-		dp = opendir((char*)path);
+		dp = opendir(path.c_str());
 		//if (dp == NULL)
 		//	return -errno;
 		int count = 0;
-		void *buf;
 		while ((de = readdir(dp)) != NULL) {
 			struct stat st;
 			memset(&st, 0, sizeof(st));
 			st.st_ino = de->d_ino;
 			st.st_mode = de->d_type << 12;
 
-		  Dirent dirent;
-			dirent.set_name(de->d_name);
-			dirent.set_reclen(de->d_reclen);
-			dirent.set_d_type(de->d_type);
-			response->add_dirent(dirent);
+			Dirent *dirent = response->add_dirent();
+			dirent->set_name(de->d_name);
+			dirent->set_reclen(de->d_reclen);
+			dirent->set_d_type(de->d_type);
 			count++;
 
-			if (filler(buf, de->d_name, &st, 0))
-				break;
 		}
 		response->set_count(count);
 		closedir(dp);

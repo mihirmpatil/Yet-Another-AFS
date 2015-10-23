@@ -5,6 +5,8 @@
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <dirent.h>
+#include <sys/stat.h>
 
 #include "afs_fuse_structs.h"
 #include "grpc_afs_wrapper.h"
@@ -49,7 +51,8 @@ static int afs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 	else {
 		struct afs_dirent *dirent_arr = grpc_afs_readdir(path);
 		int count = sizeof(dirent_arr)/sizeof(struct afs_dirent);
-		for (int i = 0; i < count; i++) {
+		int i;
+		for (i = 0; i < count; i++) {
 			struct stat st;
 			memset(&st, 0, sizeof(st));
 			st.st_ino = de->d_ino;
@@ -85,6 +88,6 @@ static struct fuse_operations afs_oper = {
 };
 
 int main(int argc, char *argv[]) {
-	grpc_afs_open("random_file");
+	//grpc_afs_open("random_file");
   return fuse_main(argc, argv, &afs_oper, NULL);
 }
