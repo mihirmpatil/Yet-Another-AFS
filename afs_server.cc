@@ -55,6 +55,9 @@ using afs::DirentReply;
 using afs::Dirent;
 using afs::AFS;
 
+// TODO add code to handle path translations
+
+
 // Logic and data behind the server's behavior.
 class AFSServiceImpl final : public AFS::Service {
   Status afs_open(ServerContext* context, const Request* request,
@@ -132,6 +135,7 @@ void RunServer() {
 }
 
 int main(int argc, char** argv) {
+	// TODO take path as input from command line and monitor that path
   RunServer();
 
   return 0;
