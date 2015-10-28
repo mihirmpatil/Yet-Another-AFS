@@ -53,6 +53,7 @@ using afs::Request;
 using afs::Reply;
 using afs::DirentReply;
 using afs::Dirent;
+using afs::Stat;
 using afs::AFS;
 
 // TODO add code to handle path translations
@@ -113,6 +114,24 @@ class AFSServiceImpl final : public AFS::Service {
 		
 		return Status::OK;
 	}
+
+	Status afs_getattr(ServerContext *context, const Request* request, 
+									Stat *response) override {
+		
+		std::string path = request->name();
+		struct stat *st = (struct stat*)malloc(sizeof(struct stat));
+		int res = lstat(path.c_str(), st);
+		//if (res == -1)
+		//	return Status::NOT_FOUND;
+
+		response->set_size(st->st_size);
+		response->set_a_time(st->st_atime);
+		response->set_m_time(st->st_mtime);
+		response->set_c_time(st->st_ctime);
+
+		return Status::OK;
+	}
+
 };
 
 void RunServer() {

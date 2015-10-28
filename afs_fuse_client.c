@@ -21,10 +21,9 @@ static int afs_getattr(const char *path, struct stat *stbuf)
 {
 	int res;
 
-	res = lstat(path, stbuf);
-	if (res == -1) 
-		return -errno;
-
+	//res = lstat(path, stbuf);
+	//if (res == -1) 
+	struct stat *s = grpc_afs_getattr(path, stbuf);
 	return 0;
 }
 

@@ -36,6 +36,7 @@
 #include <memory>
 #include <string>
 
+#include <sys/stat.h>
 #include <grpc++/grpc++.h>
 
 #include "afs.grpc.pb.h"
@@ -49,6 +50,7 @@ using afs::Request;
 using afs::Reply;
 using afs::Dirent;
 using afs::DirentReply;
+using afs::Stat;
 using afs::AFS;
 
 class AFSClient {
@@ -116,6 +118,24 @@ class AFSClient {
 		return dirent_arr;
 	}
 
+	struct stat* afs_getattr(const std::string& path) {
+	
+		Request request;
+		request.set_name(path);
+		Stat s;
+		ClientContext context;
+
+		Status status = stub_->afs_getattr(&context, request, &s);
+		struct stat *st = (struct stat*)malloc(sizeof(struct stat));
+		st->st_size = s.size();
+		st->st_atime = s.a_time();
+		st->st_mtime = s.m_time();
+		st->st_ctime = s.c_time();
+
+		return st;
+
+	}
+
  private:
   std::unique_ptr<AFS::Stub> stub_;
 };
@@ -137,3 +157,9 @@ extern "C" struct afs_dirent* grpc_afs_readdir(const char *path) {
 	return r;
 }
 
+extern "C" struct stat* grpc_afs_getattr(const char *path, struct stat *s) {
+  AFSClient client(
+      grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+  s = client.afs_getattr(path);
+	return s;
+}
