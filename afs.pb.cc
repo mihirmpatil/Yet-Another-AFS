@@ -76,11 +76,14 @@ void protobuf_AssignDesc_afs_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Reply, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Reply, _is_default_instance_));
   Stat_descriptor_ = file->message_type(2);
-  static const int Stat_offsets_[4] = {
+  static const int Stat_offsets_[7] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, size_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, a_time_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, m_time_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, c_time_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, mode_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, block_size_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, blocks_),
   };
   Stat_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
@@ -173,16 +176,17 @@ void protobuf_AddDesc_afs_2eproto() {
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\tafs.proto\022\003afs\"\027\n\007Request\022\014\n\004name\030\001 \001("
-    "\t\"\025\n\005Reply\022\014\n\004data\030\001 \001(\t\"D\n\004Stat\022\014\n\004size"
+    "\t\"\025\n\005Reply\022\014\n\004data\030\001 \001(\t\"v\n\004Stat\022\014\n\004size"
     "\030\001 \001(\003\022\016\n\006a_time\030\002 \001(\003\022\016\n\006m_time\030\003 \001(\003\022\016"
-    "\n\006c_time\030\004 \001(\003\"6\n\006Dirent\022\014\n\004name\030\001 \001(\t\022\016"
-    "\n\006reclen\030\002 \001(\005\022\016\n\006d_type\030\003 \001(\005\"9\n\013Dirent"
-    "Reply\022\r\n\005count\030\001 \001(\005\022\033\n\006dirent\030\002 \003(\0132\013.a"
-    "fs.Dirent2\212\001\n\003AFS\022(\n\010afs_open\022\014.afs.Requ"
-    "est\032\n.afs.Reply\"\0000\001\022(\n\013afs_getattr\022\014.afs"
-    ".Request\032\t.afs.Stat\"\000\022/\n\013afs_readdir\022\014.a"
-    "fs.Request\032\020.afs.DirentReply\"\000B\017\n\007ex.grp"
-    "c\242\002\003AFSb\006proto3", 415);
+    "\n\006c_time\030\004 \001(\003\022\014\n\004mode\030\005 \001(\005\022\022\n\nblock_si"
+    "ze\030\006 \001(\005\022\016\n\006blocks\030\007 \001(\005\"6\n\006Dirent\022\014\n\004na"
+    "me\030\001 \001(\t\022\016\n\006reclen\030\002 \001(\005\022\016\n\006d_type\030\003 \001(\005"
+    "\"9\n\013DirentReply\022\r\n\005count\030\001 \001(\005\022\033\n\006dirent"
+    "\030\002 \003(\0132\013.afs.Dirent2\212\001\n\003AFS\022(\n\010afs_open\022"
+    "\014.afs.Request\032\n.afs.Reply\"\0000\001\022(\n\013afs_get"
+    "attr\022\014.afs.Request\032\t.afs.Stat\"\000\022/\n\013afs_r"
+    "eaddir\022\014.afs.Request\032\020.afs.DirentReply\"\000"
+    "B\017\n\007ex.grpc\242\002\003AFSb\006proto3", 465);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "afs.proto", &protobuf_RegisterTypes);
   Request::default_instance_ = new Request();
@@ -764,6 +768,9 @@ const int Stat::kSizeFieldNumber;
 const int Stat::kATimeFieldNumber;
 const int Stat::kMTimeFieldNumber;
 const int Stat::kCTimeFieldNumber;
+const int Stat::kModeFieldNumber;
+const int Stat::kBlockSizeFieldNumber;
+const int Stat::kBlocksFieldNumber;
 #endif  // !_MSC_VER
 
 Stat::Stat()
@@ -791,6 +798,9 @@ void Stat::SharedCtor() {
   a_time_ = GOOGLE_LONGLONG(0);
   m_time_ = GOOGLE_LONGLONG(0);
   c_time_ = GOOGLE_LONGLONG(0);
+  mode_ = 0;
+  block_size_ = 0;
+  blocks_ = 0;
 }
 
 Stat::~Stat() {
@@ -837,7 +847,7 @@ void Stat::Clear() {
            ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
 } while (0)
 
-  ZR_(size_, c_time_);
+  ZR_(size_, blocks_);
 
 #undef ZR_HELPER_
 #undef ZR_
@@ -909,6 +919,51 @@ bool Stat::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(40)) goto parse_mode;
+        break;
+      }
+
+      // optional int32 mode = 5;
+      case 5: {
+        if (tag == 40) {
+         parse_mode:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &mode_)));
+
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(48)) goto parse_block_size;
+        break;
+      }
+
+      // optional int32 block_size = 6;
+      case 6: {
+        if (tag == 48) {
+         parse_block_size:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &block_size_)));
+
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(56)) goto parse_blocks;
+        break;
+      }
+
+      // optional int32 blocks = 7;
+      case 7: {
+        if (tag == 56) {
+         parse_blocks:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &blocks_)));
+
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -957,6 +1012,21 @@ void Stat::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt64(4, this->c_time(), output);
   }
 
+  // optional int32 mode = 5;
+  if (this->mode() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->mode(), output);
+  }
+
+  // optional int32 block_size = 6;
+  if (this->block_size() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(6, this->block_size(), output);
+  }
+
+  // optional int32 blocks = 7;
+  if (this->blocks() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(7, this->blocks(), output);
+  }
+
   // @@protoc_insertion_point(serialize_end:afs.Stat)
 }
 
@@ -981,6 +1051,21 @@ void Stat::SerializeWithCachedSizes(
   // optional int64 c_time = 4;
   if (this->c_time() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(4, this->c_time(), target);
+  }
+
+  // optional int32 mode = 5;
+  if (this->mode() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(5, this->mode(), target);
+  }
+
+  // optional int32 block_size = 6;
+  if (this->block_size() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(6, this->block_size(), target);
+  }
+
+  // optional int32 blocks = 7;
+  if (this->blocks() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(7, this->blocks(), target);
   }
 
   // @@protoc_insertion_point(serialize_to_array_end:afs.Stat)
@@ -1018,6 +1103,27 @@ int Stat::ByteSize() const {
         this->c_time());
   }
 
+  // optional int32 mode = 5;
+  if (this->mode() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->mode());
+  }
+
+  // optional int32 block_size = 6;
+  if (this->block_size() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->block_size());
+  }
+
+  // optional int32 blocks = 7;
+  if (this->blocks() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->blocks());
+  }
+
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = total_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
@@ -1050,6 +1156,15 @@ void Stat::MergeFrom(const Stat& from) {
   if (from.c_time() != 0) {
     set_c_time(from.c_time());
   }
+  if (from.mode() != 0) {
+    set_mode(from.mode());
+  }
+  if (from.block_size() != 0) {
+    set_block_size(from.block_size());
+  }
+  if (from.blocks() != 0) {
+    set_blocks(from.blocks());
+  }
 }
 
 void Stat::CopyFrom(const ::google::protobuf::Message& from) {
@@ -1078,6 +1193,9 @@ void Stat::InternalSwap(Stat* other) {
   std::swap(a_time_, other->a_time_);
   std::swap(m_time_, other->m_time_);
   std::swap(c_time_, other->c_time_);
+  std::swap(mode_, other->mode_);
+  std::swap(block_size_, other->block_size_);
+  std::swap(blocks_, other->blocks_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -1147,6 +1265,48 @@ void Stat::clear_c_time() {
   
   c_time_ = value;
   // @@protoc_insertion_point(field_set:afs.Stat.c_time)
+}
+
+// optional int32 mode = 5;
+void Stat::clear_mode() {
+  mode_ = 0;
+}
+ ::google::protobuf::int32 Stat::mode() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.mode)
+  return mode_;
+}
+ void Stat::set_mode(::google::protobuf::int32 value) {
+  
+  mode_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.mode)
+}
+
+// optional int32 block_size = 6;
+void Stat::clear_block_size() {
+  block_size_ = 0;
+}
+ ::google::protobuf::int32 Stat::block_size() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.block_size)
+  return block_size_;
+}
+ void Stat::set_block_size(::google::protobuf::int32 value) {
+  
+  block_size_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.block_size)
+}
+
+// optional int32 blocks = 7;
+void Stat::clear_blocks() {
+  blocks_ = 0;
+}
+ ::google::protobuf::int32 Stat::blocks() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.blocks)
+  return blocks_;
+}
+ void Stat::set_blocks(::google::protobuf::int32 value) {
+  
+  blocks_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.blocks)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

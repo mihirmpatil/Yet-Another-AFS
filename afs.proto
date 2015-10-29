@@ -58,6 +58,9 @@ message Stat {
 	int64 a_time = 2;
 	int64 m_time = 3;
 	int64 c_time = 4;
+	int32 mode = 5;
+	int32 block_size= 6;
+	int32 blocks = 7;
 }
 
 message Dirent {

@@ -290,6 +290,24 @@ class Stat : public ::google::protobuf::Message {
   ::google::protobuf::int64 c_time() const;
   void set_c_time(::google::protobuf::int64 value);
 
+  // optional int32 mode = 5;
+  void clear_mode();
+  static const int kModeFieldNumber = 5;
+  ::google::protobuf::int32 mode() const;
+  void set_mode(::google::protobuf::int32 value);
+
+  // optional int32 block_size = 6;
+  void clear_block_size();
+  static const int kBlockSizeFieldNumber = 6;
+  ::google::protobuf::int32 block_size() const;
+  void set_block_size(::google::protobuf::int32 value);
+
+  // optional int32 blocks = 7;
+  void clear_blocks();
+  static const int kBlocksFieldNumber = 7;
+  ::google::protobuf::int32 blocks() const;
+  void set_blocks(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:afs.Stat)
  private:
 
@@ -299,6 +317,9 @@ class Stat : public ::google::protobuf::Message {
   ::google::protobuf::int64 a_time_;
   ::google::protobuf::int64 m_time_;
   ::google::protobuf::int64 c_time_;
+  ::google::protobuf::int32 mode_;
+  ::google::protobuf::int32 block_size_;
+  ::google::protobuf::int32 blocks_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_afs_2eproto();
   friend void protobuf_AssignDesc_afs_2eproto();
@@ -651,6 +672,48 @@ inline void Stat::set_c_time(::google::protobuf::int64 value) {
   
   c_time_ = value;
   // @@protoc_insertion_point(field_set:afs.Stat.c_time)
+}
+
+// optional int32 mode = 5;
+inline void Stat::clear_mode() {
+  mode_ = 0;
+}
+inline ::google::protobuf::int32 Stat::mode() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.mode)
+  return mode_;
+}
+inline void Stat::set_mode(::google::protobuf::int32 value) {
+  
+  mode_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.mode)
+}
+
+// optional int32 block_size = 6;
+inline void Stat::clear_block_size() {
+  block_size_ = 0;
+}
+inline ::google::protobuf::int32 Stat::block_size() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.block_size)
+  return block_size_;
+}
+inline void Stat::set_block_size(::google::protobuf::int32 value) {
+  
+  block_size_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.block_size)
+}
+
+// optional int32 blocks = 7;
+inline void Stat::clear_blocks() {
+  blocks_ = 0;
+}
+inline ::google::protobuf::int32 Stat::blocks() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.blocks)
+  return blocks_;
+}
+inline void Stat::set_blocks(::google::protobuf::int32 value) {
+  
+  blocks_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.blocks)
 }
 
 // -------------------------------------------------------------------

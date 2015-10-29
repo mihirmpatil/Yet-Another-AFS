@@ -131,6 +131,16 @@ class AFSClient {
 		st->st_atime = s.a_time();
 		st->st_mtime = s.m_time();
 		st->st_ctime = s.c_time();
+		st->st_mode = s.mode();
+		st->st_blksize = s.block_size();
+		st->st_blocks = s.blocks();
+
+		st->st_dev = 0;
+		st->st_ino = 0;
+		st->st_nlink = 0;		
+		st->st_uid = 0;
+		st->st_gid = 0;
+		st->st_rdev = 0;
 
 		return st;
 

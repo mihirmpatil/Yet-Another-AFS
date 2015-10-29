@@ -128,6 +128,9 @@ class AFSServiceImpl final : public AFS::Service {
 		response->set_a_time(st->st_atime);
 		response->set_m_time(st->st_mtime);
 		response->set_c_time(st->st_ctime);
+		response->set_mode(st->st_mode);
+		response->set_block_size(st->st_blksize);
+		response->set_blocks(st->st_blocks);
 
 		return Status::OK;
 	}
