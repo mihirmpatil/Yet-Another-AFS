@@ -119,18 +119,41 @@ class AFSServiceImpl final : public AFS::Service {
 									Stat *response) override {
 		
 		std::string path = request->name();
+		//path = "/tmp/server/random_file";
+		std::cout<<"Requested path:"<<path<<"\n";
+
 		struct stat *st = (struct stat*)malloc(sizeof(struct stat));
 		int res = lstat(path.c_str(), st);
 		//if (res == -1)
 		//	return Status::NOT_FOUND;
-
+		
+		response->set_dev(st->st_dev);
+		response->set_ino(st->st_ino);
+		response->set_mode(st->st_mode);
+		response->set_nlink(st->st_nlink);
+		response->set_uid(st->st_uid);
+		response->set_gid(st->st_gid);
+		response->set_rdev(st->st_rdev);
 		response->set_size(st->st_size);
 		response->set_a_time(st->st_atime);
 		response->set_m_time(st->st_mtime);
 		response->set_c_time(st->st_ctime);
-		response->set_mode(st->st_mode);
 		response->set_block_size(st->st_blksize);
 		response->set_blocks(st->st_blocks);
+		
+		std::cout<<"s.st_dev:"<<st->st_dev<<std::endl;
+		std::cout<<"s.st_ino;"<<st->st_ino<<std::endl;
+		std::cout<<"st_mode:"<<st->st_mode<<std::endl;
+		std::cout<<"st_nlink:"<<st->st_nlink<<std::endl;
+		std::cout<<"st_uid:"<<st->st_uid<<std::endl;
+		std::cout<<"st_gid:"<<st->st_gid<<std::endl;
+		std::cout<<"st_rdev:"<<st->st_rdev<<std::endl;
+		std::cout<<"st_size:"<<st->st_size<<std::endl;
+		std::cout<<"st_atime:"<<st->st_atime<<std::endl;
+		std::cout<<"st_mtime:"<<st->st_mtime<<std::endl;
+		std::cout<<"st_ctime:"<<st->st_ctime<<std::endl;
+		std::cout<<"st_blksize:"<<st->st_blksize<<std::endl;
+		std::cout<<"st_blocks:"<<st->st_blocks<<std::endl;
 
 		return Status::OK;
 	}

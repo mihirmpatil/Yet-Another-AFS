@@ -24,6 +24,21 @@ static int afs_getattr(const char *path, struct stat *stbuf)
 	//res = lstat(path, stbuf);
 	//if (res == -1) 
 	struct stat *s = grpc_afs_getattr(path, stbuf);
+	
+	stbuf->st_dev = s->st_dev;
+	stbuf->st_ino = s->st_ino;
+	stbuf->st_mode = s->st_mode;
+	stbuf->st_nlink = s->st_nlink;
+	stbuf->st_uid = s->st_uid;
+	stbuf->st_gid = s->st_gid;
+	stbuf->st_rdev = s->st_rdev;
+	stbuf->st_size = s->st_size;
+	stbuf->st_atime = s->st_atime;
+	stbuf->st_mtime = s->st_mtime;
+	stbuf->st_ctime = s->st_ctime;
+	stbuf->st_blksize = s->st_blksize;
+	stbuf->st_blocks = s->st_blocks;
+
 	return 0;
 }
 

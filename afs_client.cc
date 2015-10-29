@@ -127,20 +127,33 @@ class AFSClient {
 
 		Status status = stub_->afs_getattr(&context, request, &s);
 		struct stat *st = (struct stat*)malloc(sizeof(struct stat));
+		st->st_dev = s.dev();
+		st->st_ino = s.ino();
+		st->st_mode = s.mode();
+		st->st_nlink = s.nlink();
+		st->st_uid = s.uid();
+		st->st_gid = s.gid();
+		st->st_rdev = s.rdev();
 		st->st_size = s.size();
 		st->st_atime = s.a_time();
 		st->st_mtime = s.m_time();
 		st->st_ctime = s.c_time();
-		st->st_mode = s.mode();
 		st->st_blksize = s.block_size();
 		st->st_blocks = s.blocks();
 
-		st->st_dev = 0;
-		st->st_ino = 0;
-		st->st_nlink = 0;		
-		st->st_uid = 0;
-		st->st_gid = 0;
-		st->st_rdev = 0;
+		std::cout<<"s.st_dev:"<<st->st_dev<<std::endl;
+		std::cout<<"s.st_ino;"<<st->st_ino<<std::endl;
+		std::cout<<"st_mode:"<<st->st_mode<<std::endl;
+		std::cout<<"st_nlink:"<<st->st_nlink<<std::endl;
+		std::cout<<"st_uid:"<<st->st_uid<<std::endl;
+		std::cout<<"st_gid:"<<st->st_gid<<std::endl;
+		std::cout<<"st_rdev:"<<st->st_rdev<<std::endl;
+		std::cout<<"st_size:"<<st->st_size<<std::endl;
+		std::cout<<"st_atime:"<<st->st_atime<<std::endl;
+		std::cout<<"st_mtime:"<<st->st_mtime<<std::endl;
+		std::cout<<"st_ctime:"<<st->st_ctime<<std::endl;
+		std::cout<<"st_blksize:"<<st->st_blksize<<std::endl;
+		std::cout<<"st_blocks:"<<st->st_blocks<<std::endl;
 
 		return st;
 

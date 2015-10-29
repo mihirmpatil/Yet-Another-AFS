@@ -76,12 +76,18 @@ void protobuf_AssignDesc_afs_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Reply, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Reply, _is_default_instance_));
   Stat_descriptor_ = file->message_type(2);
-  static const int Stat_offsets_[7] = {
+  static const int Stat_offsets_[13] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, dev_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, ino_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, mode_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, nlink_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, uid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, gid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, rdev_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, size_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, a_time_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, m_time_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, c_time_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, mode_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, block_size_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stat, blocks_),
   };
@@ -176,17 +182,19 @@ void protobuf_AddDesc_afs_2eproto() {
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\tafs.proto\022\003afs\"\027\n\007Request\022\014\n\004name\030\001 \001("
-    "\t\"\025\n\005Reply\022\014\n\004data\030\001 \001(\t\"v\n\004Stat\022\014\n\004size"
-    "\030\001 \001(\003\022\016\n\006a_time\030\002 \001(\003\022\016\n\006m_time\030\003 \001(\003\022\016"
-    "\n\006c_time\030\004 \001(\003\022\014\n\004mode\030\005 \001(\005\022\022\n\nblock_si"
-    "ze\030\006 \001(\005\022\016\n\006blocks\030\007 \001(\005\"6\n\006Dirent\022\014\n\004na"
-    "me\030\001 \001(\t\022\016\n\006reclen\030\002 \001(\005\022\016\n\006d_type\030\003 \001(\005"
-    "\"9\n\013DirentReply\022\r\n\005count\030\001 \001(\005\022\033\n\006dirent"
-    "\030\002 \003(\0132\013.afs.Dirent2\212\001\n\003AFS\022(\n\010afs_open\022"
-    "\014.afs.Request\032\n.afs.Reply\"\0000\001\022(\n\013afs_get"
-    "attr\022\014.afs.Request\032\t.afs.Stat\"\000\022/\n\013afs_r"
-    "eaddir\022\014.afs.Request\032\020.afs.DirentReply\"\000"
-    "B\017\n\007ex.grpc\242\002\003AFSb\006proto3", 465);
+    "\t\"\025\n\005Reply\022\014\n\004data\030\001 \001(\t\"\307\001\n\004Stat\022\013\n\003dev"
+    "\030\001 \001(\005\022\013\n\003ino\030\002 \001(\005\022\014\n\004mode\030\003 \001(\005\022\r\n\005nli"
+    "nk\030\004 \001(\005\022\013\n\003uid\030\005 \001(\005\022\013\n\003gid\030\006 \001(\005\022\014\n\004rd"
+    "ev\030\007 \001(\005\022\014\n\004size\030\010 \001(\003\022\016\n\006a_time\030\t \001(\003\022\016"
+    "\n\006m_time\030\n \001(\003\022\016\n\006c_time\030\013 \001(\003\022\022\n\nblock_"
+    "size\030\014 \001(\005\022\016\n\006blocks\030\r \001(\005\"6\n\006Dirent\022\014\n\004"
+    "name\030\001 \001(\t\022\016\n\006reclen\030\002 \001(\005\022\016\n\006d_type\030\003 \001"
+    "(\005\"9\n\013DirentReply\022\r\n\005count\030\001 \001(\005\022\033\n\006dire"
+    "nt\030\002 \003(\0132\013.afs.Dirent2\212\001\n\003AFS\022(\n\010afs_ope"
+    "n\022\014.afs.Request\032\n.afs.Reply\"\0000\001\022(\n\013afs_g"
+    "etattr\022\014.afs.Request\032\t.afs.Stat\"\000\022/\n\013afs"
+    "_readdir\022\014.afs.Request\032\020.afs.DirentReply"
+    "\"\000B\017\n\007ex.grpc\242\002\003AFSb\006proto3", 547);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "afs.proto", &protobuf_RegisterTypes);
   Request::default_instance_ = new Request();
@@ -764,11 +772,17 @@ void Reply::clear_data() {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int Stat::kDevFieldNumber;
+const int Stat::kInoFieldNumber;
+const int Stat::kModeFieldNumber;
+const int Stat::kNlinkFieldNumber;
+const int Stat::kUidFieldNumber;
+const int Stat::kGidFieldNumber;
+const int Stat::kRdevFieldNumber;
 const int Stat::kSizeFieldNumber;
 const int Stat::kATimeFieldNumber;
 const int Stat::kMTimeFieldNumber;
 const int Stat::kCTimeFieldNumber;
-const int Stat::kModeFieldNumber;
 const int Stat::kBlockSizeFieldNumber;
 const int Stat::kBlocksFieldNumber;
 #endif  // !_MSC_VER
@@ -794,11 +808,17 @@ Stat::Stat(const Stat& from)
 void Stat::SharedCtor() {
     _is_default_instance_ = false;
   _cached_size_ = 0;
+  dev_ = 0;
+  ino_ = 0;
+  mode_ = 0;
+  nlink_ = 0;
+  uid_ = 0;
+  gid_ = 0;
+  rdev_ = 0;
   size_ = GOOGLE_LONGLONG(0);
   a_time_ = GOOGLE_LONGLONG(0);
   m_time_ = GOOGLE_LONGLONG(0);
   c_time_ = GOOGLE_LONGLONG(0);
-  mode_ = 0;
   block_size_ = 0;
   blocks_ = 0;
 }
@@ -847,7 +867,10 @@ void Stat::Clear() {
            ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
 } while (0)
 
-  ZR_(size_, blocks_);
+  ZR_(dev_, size_);
+  rdev_ = 0;
+  ZR_(block_size_, blocks_);
+  a_time_ = GOOGLE_LONGLONG(0);
 
 #undef ZR_HELPER_
 #undef ZR_
@@ -864,68 +887,38 @@ bool Stat::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional int64 size = 1;
+      // optional int32 dev = 1;
       case 1: {
         if (tag == 8) {
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
-                 input, &size_)));
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &dev_)));
 
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(16)) goto parse_a_time;
+        if (input->ExpectTag(16)) goto parse_ino;
         break;
       }
 
-      // optional int64 a_time = 2;
+      // optional int32 ino = 2;
       case 2: {
         if (tag == 16) {
-         parse_a_time:
+         parse_ino:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
-                 input, &a_time_)));
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &ino_)));
 
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(24)) goto parse_m_time;
+        if (input->ExpectTag(24)) goto parse_mode;
         break;
       }
 
-      // optional int64 m_time = 3;
+      // optional int32 mode = 3;
       case 3: {
         if (tag == 24) {
-         parse_m_time:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
-                 input, &m_time_)));
-
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(32)) goto parse_c_time;
-        break;
-      }
-
-      // optional int64 c_time = 4;
-      case 4: {
-        if (tag == 32) {
-         parse_c_time:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
-                 input, &c_time_)));
-
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(40)) goto parse_mode;
-        break;
-      }
-
-      // optional int32 mode = 5;
-      case 5: {
-        if (tag == 40) {
          parse_mode:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
@@ -934,13 +927,133 @@ bool Stat::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(48)) goto parse_block_size;
+        if (input->ExpectTag(32)) goto parse_nlink;
         break;
       }
 
-      // optional int32 block_size = 6;
+      // optional int32 nlink = 4;
+      case 4: {
+        if (tag == 32) {
+         parse_nlink:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &nlink_)));
+
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(40)) goto parse_uid;
+        break;
+      }
+
+      // optional int32 uid = 5;
+      case 5: {
+        if (tag == 40) {
+         parse_uid:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &uid_)));
+
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(48)) goto parse_gid;
+        break;
+      }
+
+      // optional int32 gid = 6;
       case 6: {
         if (tag == 48) {
+         parse_gid:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &gid_)));
+
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(56)) goto parse_rdev;
+        break;
+      }
+
+      // optional int32 rdev = 7;
+      case 7: {
+        if (tag == 56) {
+         parse_rdev:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &rdev_)));
+
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(64)) goto parse_size;
+        break;
+      }
+
+      // optional int64 size = 8;
+      case 8: {
+        if (tag == 64) {
+         parse_size:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &size_)));
+
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(72)) goto parse_a_time;
+        break;
+      }
+
+      // optional int64 a_time = 9;
+      case 9: {
+        if (tag == 72) {
+         parse_a_time:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &a_time_)));
+
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(80)) goto parse_m_time;
+        break;
+      }
+
+      // optional int64 m_time = 10;
+      case 10: {
+        if (tag == 80) {
+         parse_m_time:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &m_time_)));
+
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(88)) goto parse_c_time;
+        break;
+      }
+
+      // optional int64 c_time = 11;
+      case 11: {
+        if (tag == 88) {
+         parse_c_time:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &c_time_)));
+
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(96)) goto parse_block_size;
+        break;
+      }
+
+      // optional int32 block_size = 12;
+      case 12: {
+        if (tag == 96) {
          parse_block_size:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
@@ -949,13 +1062,13 @@ bool Stat::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(56)) goto parse_blocks;
+        if (input->ExpectTag(104)) goto parse_blocks;
         break;
       }
 
-      // optional int32 blocks = 7;
-      case 7: {
-        if (tag == 56) {
+      // optional int32 blocks = 13;
+      case 13: {
+        if (tag == 104) {
          parse_blocks:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
@@ -992,39 +1105,69 @@ failure:
 void Stat::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:afs.Stat)
-  // optional int64 size = 1;
-  if (this->size() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt64(1, this->size(), output);
+  // optional int32 dev = 1;
+  if (this->dev() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->dev(), output);
   }
 
-  // optional int64 a_time = 2;
-  if (this->a_time() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt64(2, this->a_time(), output);
+  // optional int32 ino = 2;
+  if (this->ino() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->ino(), output);
   }
 
-  // optional int64 m_time = 3;
-  if (this->m_time() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt64(3, this->m_time(), output);
-  }
-
-  // optional int64 c_time = 4;
-  if (this->c_time() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt64(4, this->c_time(), output);
-  }
-
-  // optional int32 mode = 5;
+  // optional int32 mode = 3;
   if (this->mode() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->mode(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->mode(), output);
   }
 
-  // optional int32 block_size = 6;
+  // optional int32 nlink = 4;
+  if (this->nlink() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->nlink(), output);
+  }
+
+  // optional int32 uid = 5;
+  if (this->uid() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->uid(), output);
+  }
+
+  // optional int32 gid = 6;
+  if (this->gid() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(6, this->gid(), output);
+  }
+
+  // optional int32 rdev = 7;
+  if (this->rdev() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(7, this->rdev(), output);
+  }
+
+  // optional int64 size = 8;
+  if (this->size() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(8, this->size(), output);
+  }
+
+  // optional int64 a_time = 9;
+  if (this->a_time() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(9, this->a_time(), output);
+  }
+
+  // optional int64 m_time = 10;
+  if (this->m_time() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(10, this->m_time(), output);
+  }
+
+  // optional int64 c_time = 11;
+  if (this->c_time() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(11, this->c_time(), output);
+  }
+
+  // optional int32 block_size = 12;
   if (this->block_size() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(6, this->block_size(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(12, this->block_size(), output);
   }
 
-  // optional int32 blocks = 7;
+  // optional int32 blocks = 13;
   if (this->blocks() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(7, this->blocks(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(13, this->blocks(), output);
   }
 
   // @@protoc_insertion_point(serialize_end:afs.Stat)
@@ -1033,39 +1176,69 @@ void Stat::SerializeWithCachedSizes(
 ::google::protobuf::uint8* Stat::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:afs.Stat)
-  // optional int64 size = 1;
-  if (this->size() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(1, this->size(), target);
+  // optional int32 dev = 1;
+  if (this->dev() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->dev(), target);
   }
 
-  // optional int64 a_time = 2;
-  if (this->a_time() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(2, this->a_time(), target);
+  // optional int32 ino = 2;
+  if (this->ino() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->ino(), target);
   }
 
-  // optional int64 m_time = 3;
-  if (this->m_time() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(3, this->m_time(), target);
-  }
-
-  // optional int64 c_time = 4;
-  if (this->c_time() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(4, this->c_time(), target);
-  }
-
-  // optional int32 mode = 5;
+  // optional int32 mode = 3;
   if (this->mode() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(5, this->mode(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->mode(), target);
   }
 
-  // optional int32 block_size = 6;
+  // optional int32 nlink = 4;
+  if (this->nlink() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->nlink(), target);
+  }
+
+  // optional int32 uid = 5;
+  if (this->uid() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(5, this->uid(), target);
+  }
+
+  // optional int32 gid = 6;
+  if (this->gid() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(6, this->gid(), target);
+  }
+
+  // optional int32 rdev = 7;
+  if (this->rdev() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(7, this->rdev(), target);
+  }
+
+  // optional int64 size = 8;
+  if (this->size() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(8, this->size(), target);
+  }
+
+  // optional int64 a_time = 9;
+  if (this->a_time() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(9, this->a_time(), target);
+  }
+
+  // optional int64 m_time = 10;
+  if (this->m_time() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(10, this->m_time(), target);
+  }
+
+  // optional int64 c_time = 11;
+  if (this->c_time() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(11, this->c_time(), target);
+  }
+
+  // optional int32 block_size = 12;
   if (this->block_size() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(6, this->block_size(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(12, this->block_size(), target);
   }
 
-  // optional int32 blocks = 7;
+  // optional int32 blocks = 13;
   if (this->blocks() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(7, this->blocks(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(13, this->blocks(), target);
   }
 
   // @@protoc_insertion_point(serialize_to_array_end:afs.Stat)
@@ -1075,49 +1248,91 @@ void Stat::SerializeWithCachedSizes(
 int Stat::ByteSize() const {
   int total_size = 0;
 
-  // optional int64 size = 1;
-  if (this->size() != 0) {
+  // optional int32 dev = 1;
+  if (this->dev() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int64Size(
-        this->size());
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->dev());
   }
 
-  // optional int64 a_time = 2;
-  if (this->a_time() != 0) {
+  // optional int32 ino = 2;
+  if (this->ino() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int64Size(
-        this->a_time());
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->ino());
   }
 
-  // optional int64 m_time = 3;
-  if (this->m_time() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int64Size(
-        this->m_time());
-  }
-
-  // optional int64 c_time = 4;
-  if (this->c_time() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::Int64Size(
-        this->c_time());
-  }
-
-  // optional int32 mode = 5;
+  // optional int32 mode = 3;
   if (this->mode() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->mode());
   }
 
-  // optional int32 block_size = 6;
+  // optional int32 nlink = 4;
+  if (this->nlink() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->nlink());
+  }
+
+  // optional int32 uid = 5;
+  if (this->uid() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->uid());
+  }
+
+  // optional int32 gid = 6;
+  if (this->gid() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->gid());
+  }
+
+  // optional int32 rdev = 7;
+  if (this->rdev() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->rdev());
+  }
+
+  // optional int64 size = 8;
+  if (this->size() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->size());
+  }
+
+  // optional int64 a_time = 9;
+  if (this->a_time() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->a_time());
+  }
+
+  // optional int64 m_time = 10;
+  if (this->m_time() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->m_time());
+  }
+
+  // optional int64 c_time = 11;
+  if (this->c_time() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->c_time());
+  }
+
+  // optional int32 block_size = 12;
   if (this->block_size() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->block_size());
   }
 
-  // optional int32 blocks = 7;
+  // optional int32 blocks = 13;
   if (this->blocks() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
@@ -1144,6 +1359,27 @@ void Stat::MergeFrom(const ::google::protobuf::Message& from) {
 
 void Stat::MergeFrom(const Stat& from) {
   if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
+  if (from.dev() != 0) {
+    set_dev(from.dev());
+  }
+  if (from.ino() != 0) {
+    set_ino(from.ino());
+  }
+  if (from.mode() != 0) {
+    set_mode(from.mode());
+  }
+  if (from.nlink() != 0) {
+    set_nlink(from.nlink());
+  }
+  if (from.uid() != 0) {
+    set_uid(from.uid());
+  }
+  if (from.gid() != 0) {
+    set_gid(from.gid());
+  }
+  if (from.rdev() != 0) {
+    set_rdev(from.rdev());
+  }
   if (from.size() != 0) {
     set_size(from.size());
   }
@@ -1155,9 +1391,6 @@ void Stat::MergeFrom(const Stat& from) {
   }
   if (from.c_time() != 0) {
     set_c_time(from.c_time());
-  }
-  if (from.mode() != 0) {
-    set_mode(from.mode());
   }
   if (from.block_size() != 0) {
     set_block_size(from.block_size());
@@ -1189,11 +1422,17 @@ void Stat::Swap(Stat* other) {
   InternalSwap(other);
 }
 void Stat::InternalSwap(Stat* other) {
+  std::swap(dev_, other->dev_);
+  std::swap(ino_, other->ino_);
+  std::swap(mode_, other->mode_);
+  std::swap(nlink_, other->nlink_);
+  std::swap(uid_, other->uid_);
+  std::swap(gid_, other->gid_);
+  std::swap(rdev_, other->rdev_);
   std::swap(size_, other->size_);
   std::swap(a_time_, other->a_time_);
   std::swap(m_time_, other->m_time_);
   std::swap(c_time_, other->c_time_);
-  std::swap(mode_, other->mode_);
   std::swap(block_size_, other->block_size_);
   std::swap(blocks_, other->blocks_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
@@ -1211,63 +1450,35 @@ void Stat::InternalSwap(Stat* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // Stat
 
-// optional int64 size = 1;
-void Stat::clear_size() {
-  size_ = GOOGLE_LONGLONG(0);
+// optional int32 dev = 1;
+void Stat::clear_dev() {
+  dev_ = 0;
 }
- ::google::protobuf::int64 Stat::size() const {
-  // @@protoc_insertion_point(field_get:afs.Stat.size)
-  return size_;
+ ::google::protobuf::int32 Stat::dev() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.dev)
+  return dev_;
 }
- void Stat::set_size(::google::protobuf::int64 value) {
+ void Stat::set_dev(::google::protobuf::int32 value) {
   
-  size_ = value;
-  // @@protoc_insertion_point(field_set:afs.Stat.size)
+  dev_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.dev)
 }
 
-// optional int64 a_time = 2;
-void Stat::clear_a_time() {
-  a_time_ = GOOGLE_LONGLONG(0);
+// optional int32 ino = 2;
+void Stat::clear_ino() {
+  ino_ = 0;
 }
- ::google::protobuf::int64 Stat::a_time() const {
-  // @@protoc_insertion_point(field_get:afs.Stat.a_time)
-  return a_time_;
+ ::google::protobuf::int32 Stat::ino() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.ino)
+  return ino_;
 }
- void Stat::set_a_time(::google::protobuf::int64 value) {
+ void Stat::set_ino(::google::protobuf::int32 value) {
   
-  a_time_ = value;
-  // @@protoc_insertion_point(field_set:afs.Stat.a_time)
+  ino_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.ino)
 }
 
-// optional int64 m_time = 3;
-void Stat::clear_m_time() {
-  m_time_ = GOOGLE_LONGLONG(0);
-}
- ::google::protobuf::int64 Stat::m_time() const {
-  // @@protoc_insertion_point(field_get:afs.Stat.m_time)
-  return m_time_;
-}
- void Stat::set_m_time(::google::protobuf::int64 value) {
-  
-  m_time_ = value;
-  // @@protoc_insertion_point(field_set:afs.Stat.m_time)
-}
-
-// optional int64 c_time = 4;
-void Stat::clear_c_time() {
-  c_time_ = GOOGLE_LONGLONG(0);
-}
- ::google::protobuf::int64 Stat::c_time() const {
-  // @@protoc_insertion_point(field_get:afs.Stat.c_time)
-  return c_time_;
-}
- void Stat::set_c_time(::google::protobuf::int64 value) {
-  
-  c_time_ = value;
-  // @@protoc_insertion_point(field_set:afs.Stat.c_time)
-}
-
-// optional int32 mode = 5;
+// optional int32 mode = 3;
 void Stat::clear_mode() {
   mode_ = 0;
 }
@@ -1281,7 +1492,119 @@ void Stat::clear_mode() {
   // @@protoc_insertion_point(field_set:afs.Stat.mode)
 }
 
-// optional int32 block_size = 6;
+// optional int32 nlink = 4;
+void Stat::clear_nlink() {
+  nlink_ = 0;
+}
+ ::google::protobuf::int32 Stat::nlink() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.nlink)
+  return nlink_;
+}
+ void Stat::set_nlink(::google::protobuf::int32 value) {
+  
+  nlink_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.nlink)
+}
+
+// optional int32 uid = 5;
+void Stat::clear_uid() {
+  uid_ = 0;
+}
+ ::google::protobuf::int32 Stat::uid() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.uid)
+  return uid_;
+}
+ void Stat::set_uid(::google::protobuf::int32 value) {
+  
+  uid_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.uid)
+}
+
+// optional int32 gid = 6;
+void Stat::clear_gid() {
+  gid_ = 0;
+}
+ ::google::protobuf::int32 Stat::gid() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.gid)
+  return gid_;
+}
+ void Stat::set_gid(::google::protobuf::int32 value) {
+  
+  gid_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.gid)
+}
+
+// optional int32 rdev = 7;
+void Stat::clear_rdev() {
+  rdev_ = 0;
+}
+ ::google::protobuf::int32 Stat::rdev() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.rdev)
+  return rdev_;
+}
+ void Stat::set_rdev(::google::protobuf::int32 value) {
+  
+  rdev_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.rdev)
+}
+
+// optional int64 size = 8;
+void Stat::clear_size() {
+  size_ = GOOGLE_LONGLONG(0);
+}
+ ::google::protobuf::int64 Stat::size() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.size)
+  return size_;
+}
+ void Stat::set_size(::google::protobuf::int64 value) {
+  
+  size_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.size)
+}
+
+// optional int64 a_time = 9;
+void Stat::clear_a_time() {
+  a_time_ = GOOGLE_LONGLONG(0);
+}
+ ::google::protobuf::int64 Stat::a_time() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.a_time)
+  return a_time_;
+}
+ void Stat::set_a_time(::google::protobuf::int64 value) {
+  
+  a_time_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.a_time)
+}
+
+// optional int64 m_time = 10;
+void Stat::clear_m_time() {
+  m_time_ = GOOGLE_LONGLONG(0);
+}
+ ::google::protobuf::int64 Stat::m_time() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.m_time)
+  return m_time_;
+}
+ void Stat::set_m_time(::google::protobuf::int64 value) {
+  
+  m_time_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.m_time)
+}
+
+// optional int64 c_time = 11;
+void Stat::clear_c_time() {
+  c_time_ = GOOGLE_LONGLONG(0);
+}
+ ::google::protobuf::int64 Stat::c_time() const {
+  // @@protoc_insertion_point(field_get:afs.Stat.c_time)
+  return c_time_;
+}
+ void Stat::set_c_time(::google::protobuf::int64 value) {
+  
+  c_time_ = value;
+  // @@protoc_insertion_point(field_set:afs.Stat.c_time)
+}
+
+// optional int32 block_size = 12;
 void Stat::clear_block_size() {
   block_size_ = 0;
 }
@@ -1295,7 +1618,7 @@ void Stat::clear_block_size() {
   // @@protoc_insertion_point(field_set:afs.Stat.block_size)
 }
 
-// optional int32 blocks = 7;
+// optional int32 blocks = 13;
 void Stat::clear_blocks() {
   blocks_ = 0;
 }

@@ -54,13 +54,19 @@ message Reply {
 }
 
 message Stat {
-	int64 size = 1;
-	int64 a_time = 2;
-	int64 m_time = 3;
-	int64 c_time = 4;
-	int32 mode = 5;
-	int32 block_size= 6;
-	int32 blocks = 7;
+	int32 dev = 1;
+	int32 ino = 2;
+	int32 mode = 3;
+	int32 nlink = 4;
+	int32 uid = 5;
+	int32 gid = 6;
+	int32 rdev = 7;
+	int64 size = 8;
+	int64 a_time = 9;
+	int64 m_time = 10;
+	int64 c_time = 11;
+	int32 block_size = 12;
+	int32 blocks = 13;
 }
 
 message Dirent {
