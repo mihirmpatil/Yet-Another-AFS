@@ -236,7 +236,7 @@ void protobuf_AddDesc_afs_2eproto() {
     "name\030\001 \001(\t\022\016\n\006reclen\030\002 \001(\005\022\016\n\006d_type\030\003 \001"
     "(\005\"9\n\013DirentReply\022\r\n\005count\030\001 \001(\005\022\033\n\006dire"
     "nt\030\002 \003(\0132\013.afs.Dirent\"*\n\014FlushRequest\022\014\n"
-    "\004path\030\001 \001(\t\022\014\n\004data\030\002 \001(\t\"\034\n\nFlushReply\022"
+    "\004path\030\001 \001(\t\022\014\n\004data\030\002 \001(\014\"\034\n\nFlushReply\022"
     "\016\n\006status\030\001 \001(\0052\277\001\n\003AFS\022(\n\010afs_open\022\014.af"
     "s.Request\032\n.afs.Reply\"\0000\001\022(\n\013afs_getattr"
     "\022\014.afs.Request\032\t.afs.Stat\"\000\022/\n\013afs_readd"
@@ -2473,16 +2473,12 @@ bool FlushRequest::MergePartialFromCodedStream(
         break;
       }
 
-      // optional string data = 2;
+      // optional bytes data = 2;
       case 2: {
         if (tag == 18) {
          parse_data:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_data()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->data().data(), this->data().length(),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "afs.FlushRequest.data"));
         } else {
           goto handle_unusual;
         }
@@ -2524,13 +2520,9 @@ void FlushRequest::SerializeWithCachedSizes(
       1, this->path(), output);
   }
 
-  // optional string data = 2;
+  // optional bytes data = 2;
   if (this->data().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->data().data(), this->data().length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "afs.FlushRequest.data");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
       2, this->data(), output);
   }
 
@@ -2551,14 +2543,10 @@ void FlushRequest::SerializeWithCachedSizes(
         1, this->path(), target);
   }
 
-  // optional string data = 2;
+  // optional bytes data = 2;
   if (this->data().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->data().data(), this->data().length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "afs.FlushRequest.data");
     target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
         2, this->data(), target);
   }
 
@@ -2576,10 +2564,10 @@ int FlushRequest::ByteSize() const {
         this->path());
   }
 
-  // optional string data = 2;
+  // optional bytes data = 2;
   if (this->data().size() > 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
         this->data());
   }
 
@@ -2695,7 +2683,7 @@ void FlushRequest::clear_path() {
   // @@protoc_insertion_point(field_set_allocated:afs.FlushRequest.path)
 }
 
-// optional string data = 2;
+// optional bytes data = 2;
 void FlushRequest::clear_data() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -2713,7 +2701,7 @@ void FlushRequest::clear_data() {
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:afs.FlushRequest.data)
 }
- void FlushRequest::set_data(const char* value, size_t size) {
+ void FlushRequest::set_data(const void* value, size_t size) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));

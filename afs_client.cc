@@ -164,16 +164,31 @@ class AFSClient {
 
 		std::ifstream file_stream;
 		file_stream.open(cache_path + path);
+		std::cout<<"\nTrying to open:"<<path;
 		char *buffer = new char[BUF_LEN];
+
 		while (!file_stream.eof()) {
+			
 			file_stream.read(buffer, BUF_LEN);
 			std::string file_data = buffer;
+			std::cout<<"\nWriting data: "<<file_data<<std::endl;
+			std::cout<<"\nlength: "<<file_data.length()<<std::endl;
 			request.set_data(file_data);
-			writer->Write(request);
+			
+			std::cout<<"\nBefore sending to the server";
+			writer->Write(request);			
+			std::cout<<"After wrinting to the server";
+
+			if((int)file_data.length() < 1024)
+			  break;
 		}
-		writer->WritesDone();
+		std::cout<<"\nTrying to close the file stream";
 		file_stream.close();
+		std::cout<<"\nOut of the while loop";
+		writer->WritesDone();
+		Status status = writer->Finish();
 		delete[] buffer;
+
 		return 0;
 	}
 

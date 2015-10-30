@@ -155,14 +155,17 @@ class AFSServiceImpl final : public AFS::Service {
 		reader->Read(&request);
 		std::string path = request.path();
 		std::ofstream file_stream;
+		std::cout<<"\nOpening file to write: "<<path;
 		file_stream.open(path);
 		std::string file_data;
 
 		while (reader->Read(&request)) {
 			file_data = request.data();
+			std::cout<<"\nWriting data:"<<file_data;
 			file_stream << file_data;
 		}
-
+		
+		std::cout<<"\nFinished writing the file";
 
 		file_stream.close();
 		response->set_status(0);

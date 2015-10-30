@@ -119,12 +119,20 @@ static int afs_write(const char *path, const char *buf, size_t size,
 	char prefixed_path[1024];
 	strcpy(prefixed_path, "/tmp/cache");
 	strcat(prefixed_path, path);
+	
+	printf("\nThe file opened for writing is: %s\n",prefixed_path);
+	printf("\nBuff: %s\nsize: %d\noffset: %d\n",buf,(int)size,(int)offset);
+	
 	fd = open(prefixed_path, O_WRONLY);
-	if (fd == -1)
+	if (fd == -1){
+	        printf("\nUnable to open the file");
 		return -errno;
+	}
 	res = pwrite(fd, buf, size, offset);
-	if (res == -1)
+	if (res == -1){
+	        printf("\nUnable to write to the file");
 		res = -errno;
+	}
 	close(fd);
 	return res;
 }
@@ -133,10 +141,14 @@ static int afs_flush(const char *path, struct fuse_file_info *fi)
 {
 	int res = 0;
 	// TODO push file to server here
-	char prefixed_path[1024];
+
+	/*char prefixed_path[1024];
 	strcpy(prefixed_path, "/tmp/cache");
-	strcat(prefixed_path, path);
-	res = grpc_afs_flush(prefixed_path);
+	strcat(prefixed_path, path);*/
+	
+	printf("\nCalling grpc flush on file: %s\n",path);
+
+	res = grpc_afs_flush(path);
 	return res;
 }
 

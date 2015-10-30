@@ -83,7 +83,8 @@ message DirentReply {
 
 message FlushRequest {
 	string path = 1;
-	string data = 2;
+	//string data = 2;
+	bytes data = 2;
 }
 
 message FlushReply {

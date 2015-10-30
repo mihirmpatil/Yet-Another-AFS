@@ -629,13 +629,13 @@ class FlushRequest : public ::google::protobuf::Message {
   ::std::string* release_path();
   void set_allocated_path(::std::string* path);
 
-  // optional string data = 2;
+  // optional bytes data = 2;
   void clear_data();
   static const int kDataFieldNumber = 2;
   const ::std::string& data() const;
   void set_data(const ::std::string& value);
   void set_data(const char* value);
-  void set_data(const char* value, size_t size);
+  void set_data(const void* value, size_t size);
   ::std::string* mutable_data();
   ::std::string* release_data();
   void set_allocated_data(::std::string* data);
@@ -1187,7 +1187,7 @@ inline void FlushRequest::set_allocated_path(::std::string* path) {
   // @@protoc_insertion_point(field_set_allocated:afs.FlushRequest.path)
 }
 
-// optional string data = 2;
+// optional bytes data = 2;
 inline void FlushRequest::clear_data() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -1205,7 +1205,7 @@ inline void FlushRequest::set_data(const char* value) {
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:afs.FlushRequest.data)
 }
-inline void FlushRequest::set_data(const char* value, size_t size) {
+inline void FlushRequest::set_data(const void* value, size_t size) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
