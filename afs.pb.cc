@@ -35,6 +35,12 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* DirentReply_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   DirentReply_reflection_ = NULL;
+const ::google::protobuf::Descriptor* FlushRequest_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  FlushRequest_reflection_ = NULL;
+const ::google::protobuf::Descriptor* FlushReply_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  FlushReply_reflection_ = NULL;
 
 }  // namespace
 
@@ -135,6 +141,37 @@ void protobuf_AssignDesc_afs_2eproto() {
       sizeof(DirentReply),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DirentReply, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DirentReply, _is_default_instance_));
+  FlushRequest_descriptor_ = file->message_type(5);
+  static const int FlushRequest_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FlushRequest, path_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FlushRequest, data_),
+  };
+  FlushRequest_reflection_ =
+    ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
+      FlushRequest_descriptor_,
+      FlushRequest::default_instance_,
+      FlushRequest_offsets_,
+      -1,
+      -1,
+      -1,
+      sizeof(FlushRequest),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FlushRequest, _internal_metadata_),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FlushRequest, _is_default_instance_));
+  FlushReply_descriptor_ = file->message_type(6);
+  static const int FlushReply_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FlushReply, status_),
+  };
+  FlushReply_reflection_ =
+    ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
+      FlushReply_descriptor_,
+      FlushReply::default_instance_,
+      FlushReply_offsets_,
+      -1,
+      -1,
+      -1,
+      sizeof(FlushReply),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FlushReply, _internal_metadata_),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FlushReply, _is_default_instance_));
 }
 
 namespace {
@@ -157,6 +194,10 @@ void protobuf_RegisterTypes(const ::std::string&) {
       Dirent_descriptor_, &Dirent::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
       DirentReply_descriptor_, &DirentReply::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+      FlushRequest_descriptor_, &FlushRequest::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+      FlushReply_descriptor_, &FlushReply::default_instance());
 }
 
 }  // namespace
@@ -172,6 +213,10 @@ void protobuf_ShutdownFile_afs_2eproto() {
   delete Dirent_reflection_;
   delete DirentReply::default_instance_;
   delete DirentReply_reflection_;
+  delete FlushRequest::default_instance_;
+  delete FlushRequest_reflection_;
+  delete FlushReply::default_instance_;
+  delete FlushReply_reflection_;
 }
 
 void protobuf_AddDesc_afs_2eproto() {
@@ -190,11 +235,14 @@ void protobuf_AddDesc_afs_2eproto() {
     "size\030\014 \001(\005\022\016\n\006blocks\030\r \001(\005\"6\n\006Dirent\022\014\n\004"
     "name\030\001 \001(\t\022\016\n\006reclen\030\002 \001(\005\022\016\n\006d_type\030\003 \001"
     "(\005\"9\n\013DirentReply\022\r\n\005count\030\001 \001(\005\022\033\n\006dire"
-    "nt\030\002 \003(\0132\013.afs.Dirent2\212\001\n\003AFS\022(\n\010afs_ope"
-    "n\022\014.afs.Request\032\n.afs.Reply\"\0000\001\022(\n\013afs_g"
-    "etattr\022\014.afs.Request\032\t.afs.Stat\"\000\022/\n\013afs"
-    "_readdir\022\014.afs.Request\032\020.afs.DirentReply"
-    "\"\000B\017\n\007ex.grpc\242\002\003AFSb\006proto3", 547);
+    "nt\030\002 \003(\0132\013.afs.Dirent\"*\n\014FlushRequest\022\014\n"
+    "\004path\030\001 \001(\t\022\014\n\004data\030\002 \001(\t\"\034\n\nFlushReply\022"
+    "\016\n\006status\030\001 \001(\0052\277\001\n\003AFS\022(\n\010afs_open\022\014.af"
+    "s.Request\032\n.afs.Reply\"\0000\001\022(\n\013afs_getattr"
+    "\022\014.afs.Request\032\t.afs.Stat\"\000\022/\n\013afs_readd"
+    "ir\022\014.afs.Request\032\020.afs.DirentReply\"\000\0223\n\t"
+    "afs_flush\022\021.afs.FlushRequest\032\017.afs.Flush"
+    "Reply\"\000(\001B\017\n\007ex.grpc\242\002\003AFSb\006proto3", 674);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "afs.proto", &protobuf_RegisterTypes);
   Request::default_instance_ = new Request();
@@ -202,11 +250,15 @@ void protobuf_AddDesc_afs_2eproto() {
   Stat::default_instance_ = new Stat();
   Dirent::default_instance_ = new Dirent();
   DirentReply::default_instance_ = new DirentReply();
+  FlushRequest::default_instance_ = new FlushRequest();
+  FlushReply::default_instance_ = new FlushReply();
   Request::default_instance_->InitAsDefaultInstance();
   Reply::default_instance_->InitAsDefaultInstance();
   Stat::default_instance_->InitAsDefaultInstance();
   Dirent::default_instance_->InitAsDefaultInstance();
   DirentReply::default_instance_->InitAsDefaultInstance();
+  FlushRequest::default_instance_->InitAsDefaultInstance();
+  FlushReply::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_afs_2eproto);
 }
 
@@ -2316,6 +2368,600 @@ const ::google::protobuf::RepeatedPtrField< ::afs::Dirent >&
 DirentReply::dirent() const {
   // @@protoc_insertion_point(field_list:afs.DirentReply.dirent)
   return dirent_;
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int FlushRequest::kPathFieldNumber;
+const int FlushRequest::kDataFieldNumber;
+#endif  // !_MSC_VER
+
+FlushRequest::FlushRequest()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:afs.FlushRequest)
+}
+
+void FlushRequest::InitAsDefaultInstance() {
+  _is_default_instance_ = true;
+}
+
+FlushRequest::FlushRequest(const FlushRequest& from)
+  : ::google::protobuf::Message(),
+    _internal_metadata_(NULL) {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:afs.FlushRequest)
+}
+
+void FlushRequest::SharedCtor() {
+    _is_default_instance_ = false;
+  ::google::protobuf::internal::GetEmptyString();
+  _cached_size_ = 0;
+  path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+FlushRequest::~FlushRequest() {
+  // @@protoc_insertion_point(destructor:afs.FlushRequest)
+  SharedDtor();
+}
+
+void FlushRequest::SharedDtor() {
+  path_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  data_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (this != default_instance_) {
+  }
+}
+
+void FlushRequest::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* FlushRequest::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return FlushRequest_descriptor_;
+}
+
+const FlushRequest& FlushRequest::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_afs_2eproto();
+  return *default_instance_;
+}
+
+FlushRequest* FlushRequest::default_instance_ = NULL;
+
+FlushRequest* FlushRequest::New(::google::protobuf::Arena* arena) const {
+  FlushRequest* n = new FlushRequest;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void FlushRequest::Clear() {
+  path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+bool FlushRequest::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:afs.FlushRequest)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional string path = 1;
+      case 1: {
+        if (tag == 10) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_path()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->path().data(), this->path().length(),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "afs.FlushRequest.path"));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(18)) goto parse_data;
+        break;
+      }
+
+      // optional string data = 2;
+      case 2: {
+        if (tag == 18) {
+         parse_data:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_data()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->data().data(), this->data().length(),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "afs.FlushRequest.data"));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:afs.FlushRequest)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:afs.FlushRequest)
+  return false;
+#undef DO_
+}
+
+void FlushRequest::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:afs.FlushRequest)
+  // optional string path = 1;
+  if (this->path().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->path().data(), this->path().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "afs.FlushRequest.path");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->path(), output);
+  }
+
+  // optional string data = 2;
+  if (this->data().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->data().data(), this->data().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "afs.FlushRequest.data");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->data(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:afs.FlushRequest)
+}
+
+::google::protobuf::uint8* FlushRequest::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:afs.FlushRequest)
+  // optional string path = 1;
+  if (this->path().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->path().data(), this->path().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "afs.FlushRequest.path");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        1, this->path(), target);
+  }
+
+  // optional string data = 2;
+  if (this->data().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->data().data(), this->data().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "afs.FlushRequest.data");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        2, this->data(), target);
+  }
+
+  // @@protoc_insertion_point(serialize_to_array_end:afs.FlushRequest)
+  return target;
+}
+
+int FlushRequest::ByteSize() const {
+  int total_size = 0;
+
+  // optional string path = 1;
+  if (this->path().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->path());
+  }
+
+  // optional string data = 2;
+  if (this->data().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->data());
+  }
+
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void FlushRequest::MergeFrom(const ::google::protobuf::Message& from) {
+  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
+  const FlushRequest* source = 
+      ::google::protobuf::internal::DynamicCastToGenerated<const FlushRequest>(
+          &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void FlushRequest::MergeFrom(const FlushRequest& from) {
+  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
+  if (from.path().size() > 0) {
+
+    path_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.path_);
+  }
+  if (from.data().size() > 0) {
+
+    data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
+  }
+}
+
+void FlushRequest::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void FlushRequest::CopyFrom(const FlushRequest& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool FlushRequest::IsInitialized() const {
+
+  return true;
+}
+
+void FlushRequest::Swap(FlushRequest* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void FlushRequest::InternalSwap(FlushRequest* other) {
+  path_.Swap(&other->path_);
+  data_.Swap(&other->data_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata FlushRequest::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = FlushRequest_descriptor_;
+  metadata.reflection = FlushRequest_reflection_;
+  return metadata;
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// FlushRequest
+
+// optional string path = 1;
+void FlushRequest::clear_path() {
+  path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ const ::std::string& FlushRequest::path() const {
+  // @@protoc_insertion_point(field_get:afs.FlushRequest.path)
+  return path_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void FlushRequest::set_path(const ::std::string& value) {
+  
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:afs.FlushRequest.path)
+}
+ void FlushRequest::set_path(const char* value) {
+  
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:afs.FlushRequest.path)
+}
+ void FlushRequest::set_path(const char* value, size_t size) {
+  
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:afs.FlushRequest.path)
+}
+ ::std::string* FlushRequest::mutable_path() {
+  
+  // @@protoc_insertion_point(field_mutable:afs.FlushRequest.path)
+  return path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ ::std::string* FlushRequest::release_path() {
+  
+  return path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void FlushRequest::set_allocated_path(::std::string* path) {
+  if (path != NULL) {
+    
+  } else {
+    
+  }
+  path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), path);
+  // @@protoc_insertion_point(field_set_allocated:afs.FlushRequest.path)
+}
+
+// optional string data = 2;
+void FlushRequest::clear_data() {
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ const ::std::string& FlushRequest::data() const {
+  // @@protoc_insertion_point(field_get:afs.FlushRequest.data)
+  return data_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void FlushRequest::set_data(const ::std::string& value) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:afs.FlushRequest.data)
+}
+ void FlushRequest::set_data(const char* value) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:afs.FlushRequest.data)
+}
+ void FlushRequest::set_data(const char* value, size_t size) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:afs.FlushRequest.data)
+}
+ ::std::string* FlushRequest::mutable_data() {
+  
+  // @@protoc_insertion_point(field_mutable:afs.FlushRequest.data)
+  return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ ::std::string* FlushRequest::release_data() {
+  
+  return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void FlushRequest::set_allocated_data(::std::string* data) {
+  if (data != NULL) {
+    
+  } else {
+    
+  }
+  data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
+  // @@protoc_insertion_point(field_set_allocated:afs.FlushRequest.data)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int FlushReply::kStatusFieldNumber;
+#endif  // !_MSC_VER
+
+FlushReply::FlushReply()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:afs.FlushReply)
+}
+
+void FlushReply::InitAsDefaultInstance() {
+  _is_default_instance_ = true;
+}
+
+FlushReply::FlushReply(const FlushReply& from)
+  : ::google::protobuf::Message(),
+    _internal_metadata_(NULL) {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:afs.FlushReply)
+}
+
+void FlushReply::SharedCtor() {
+    _is_default_instance_ = false;
+  _cached_size_ = 0;
+  status_ = 0;
+}
+
+FlushReply::~FlushReply() {
+  // @@protoc_insertion_point(destructor:afs.FlushReply)
+  SharedDtor();
+}
+
+void FlushReply::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void FlushReply::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* FlushReply::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return FlushReply_descriptor_;
+}
+
+const FlushReply& FlushReply::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_afs_2eproto();
+  return *default_instance_;
+}
+
+FlushReply* FlushReply::default_instance_ = NULL;
+
+FlushReply* FlushReply::New(::google::protobuf::Arena* arena) const {
+  FlushReply* n = new FlushReply;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void FlushReply::Clear() {
+  status_ = 0;
+}
+
+bool FlushReply::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:afs.FlushReply)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional int32 status = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &status_)));
+
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:afs.FlushReply)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:afs.FlushReply)
+  return false;
+#undef DO_
+}
+
+void FlushReply::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:afs.FlushReply)
+  // optional int32 status = 1;
+  if (this->status() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->status(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:afs.FlushReply)
+}
+
+::google::protobuf::uint8* FlushReply::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:afs.FlushReply)
+  // optional int32 status = 1;
+  if (this->status() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->status(), target);
+  }
+
+  // @@protoc_insertion_point(serialize_to_array_end:afs.FlushReply)
+  return target;
+}
+
+int FlushReply::ByteSize() const {
+  int total_size = 0;
+
+  // optional int32 status = 1;
+  if (this->status() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->status());
+  }
+
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void FlushReply::MergeFrom(const ::google::protobuf::Message& from) {
+  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
+  const FlushReply* source = 
+      ::google::protobuf::internal::DynamicCastToGenerated<const FlushReply>(
+          &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void FlushReply::MergeFrom(const FlushReply& from) {
+  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
+  if (from.status() != 0) {
+    set_status(from.status());
+  }
+}
+
+void FlushReply::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void FlushReply::CopyFrom(const FlushReply& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool FlushReply::IsInitialized() const {
+
+  return true;
+}
+
+void FlushReply::Swap(FlushReply* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void FlushReply::InternalSwap(FlushReply* other) {
+  std::swap(status_, other->status_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata FlushReply::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = FlushReply_descriptor_;
+  metadata.reflection = FlushReply_reflection_;
+  return metadata;
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// FlushReply
+
+// optional int32 status = 1;
+void FlushReply::clear_status() {
+  status_ = 0;
+}
+ ::google::protobuf::int32 FlushReply::status() const {
+  // @@protoc_insertion_point(field_get:afs.FlushReply.status)
+  return status_;
+}
+ void FlushReply::set_status(::google::protobuf::int32 value) {
+  
+  status_ = value;
+  // @@protoc_insertion_point(field_set:afs.FlushReply.status)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

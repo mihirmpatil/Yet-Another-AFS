@@ -13,8 +13,8 @@
 
 #define SUCCESS 0
 
-//static const char CLIENT_DIR_PATH[1024];
 
+char prefixed_path[1024];
 
 // TODO implement this function
 static int afs_getattr(const char *path, struct stat *stbuf)
@@ -86,19 +86,68 @@ static int afs_open(const char *path, struct fuse_file_info *fi)
   // check if local file exists
   // check if the local file is the updated version as the server
   // if not exists or not updated make grpc call
-	printf("In afs_open inside fuse client\n");
+	printf("In afs_open inside fuse client for %s\n",path);
   grpc_afs_open(path);
   // save file locally - handle this in grpc client itself to avoid passing data here
   return SUCCESS;
 }
 
+static int afs_read(const char *path, char *buf, size_t size, off_t offset,
+		struct fuse_file_info *fi)
+{
+	int fd;
+	int res;
+	(void) fi;
+	char prefixed_path[1024];
+	strcpy(prefixed_path, "/tmp/cache");
+	strcat(prefixed_path, path);
+	fd = open(prefixed_path, O_RDONLY);
+	if (fd == -1)
+		return -errno;
+	res = pread(fd, buf, size, offset);
+	if (res == -1)
+		res = -errno;
+	close(fd);
+	return res;
+}
+static int afs_write(const char *path, const char *buf, size_t size,
+		off_t offset, struct fuse_file_info *fi)
+{
+	int fd;
+	int res;
+	(void) fi;
+	char prefixed_path[1024];
+	strcpy(prefixed_path, "/tmp/cache");
+	strcat(prefixed_path, path);
+	fd = open(prefixed_path, O_WRONLY);
+	if (fd == -1)
+		return -errno;
+	res = pwrite(fd, buf, size, offset);
+	if (res == -1)
+		res = -errno;
+	close(fd);
+	return res;
+}
 
+static int afs_flush(const char *path, struct fuse_file_info *fi)
+{
+	int res = 0;
+	// TODO push file to server here
+	char prefixed_path[1024];
+	strcpy(prefixed_path, "/tmp/cache");
+	strcat(prefixed_path, path);
+	res = grpc_afs_flush(prefixed_path);
+	return res;
+}
 
 // FUSE operations table
 static struct fuse_operations afs_oper = {
   .getattr = afs_getattr,
 	.readdir = afs_readdir,
 	.open = afs_open,
+	.read = afs_read,
+	.write = afs_write,
+	.flush = afs_flush,
 };
 
 int main(int argc, char *argv[]) {

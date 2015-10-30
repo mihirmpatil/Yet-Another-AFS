@@ -38,6 +38,8 @@ void protobuf_ShutdownFile_afs_2eproto();
 
 class Dirent;
 class DirentReply;
+class FlushReply;
+class FlushRequest;
 class Reply;
 class Request;
 class Stat;
@@ -558,6 +560,179 @@ class DirentReply : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static DirentReply* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class FlushRequest : public ::google::protobuf::Message {
+ public:
+  FlushRequest();
+  virtual ~FlushRequest();
+
+  FlushRequest(const FlushRequest& from);
+
+  inline FlushRequest& operator=(const FlushRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const FlushRequest& default_instance();
+
+  void Swap(FlushRequest* other);
+
+  // implements Message ----------------------------------------------
+
+  inline FlushRequest* New() const { return New(NULL); }
+
+  FlushRequest* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const FlushRequest& from);
+  void MergeFrom(const FlushRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(FlushRequest* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional string path = 1;
+  void clear_path();
+  static const int kPathFieldNumber = 1;
+  const ::std::string& path() const;
+  void set_path(const ::std::string& value);
+  void set_path(const char* value);
+  void set_path(const char* value, size_t size);
+  ::std::string* mutable_path();
+  ::std::string* release_path();
+  void set_allocated_path(::std::string* path);
+
+  // optional string data = 2;
+  void clear_data();
+  static const int kDataFieldNumber = 2;
+  const ::std::string& data() const;
+  void set_data(const ::std::string& value);
+  void set_data(const char* value);
+  void set_data(const char* value, size_t size);
+  ::std::string* mutable_data();
+  ::std::string* release_data();
+  void set_allocated_data(::std::string* data);
+
+  // @@protoc_insertion_point(class_scope:afs.FlushRequest)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::internal::ArenaStringPtr path_;
+  ::google::protobuf::internal::ArenaStringPtr data_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_afs_2eproto();
+  friend void protobuf_AssignDesc_afs_2eproto();
+  friend void protobuf_ShutdownFile_afs_2eproto();
+
+  void InitAsDefaultInstance();
+  static FlushRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class FlushReply : public ::google::protobuf::Message {
+ public:
+  FlushReply();
+  virtual ~FlushReply();
+
+  FlushReply(const FlushReply& from);
+
+  inline FlushReply& operator=(const FlushReply& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const FlushReply& default_instance();
+
+  void Swap(FlushReply* other);
+
+  // implements Message ----------------------------------------------
+
+  inline FlushReply* New() const { return New(NULL); }
+
+  FlushReply* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const FlushReply& from);
+  void MergeFrom(const FlushReply& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(FlushReply* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 status = 1;
+  void clear_status();
+  static const int kStatusFieldNumber = 1;
+  ::google::protobuf::int32 status() const;
+  void set_status(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:afs.FlushReply)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::int32 status_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_afs_2eproto();
+  friend void protobuf_AssignDesc_afs_2eproto();
+  friend void protobuf_ShutdownFile_afs_2eproto();
+
+  void InitAsDefaultInstance();
+  static FlushReply* default_instance_;
+};
 // ===================================================================
 
 
@@ -965,7 +1140,119 @@ DirentReply::dirent() const {
   return dirent_;
 }
 
+// -------------------------------------------------------------------
+
+// FlushRequest
+
+// optional string path = 1;
+inline void FlushRequest::clear_path() {
+  path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& FlushRequest::path() const {
+  // @@protoc_insertion_point(field_get:afs.FlushRequest.path)
+  return path_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void FlushRequest::set_path(const ::std::string& value) {
+  
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:afs.FlushRequest.path)
+}
+inline void FlushRequest::set_path(const char* value) {
+  
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:afs.FlushRequest.path)
+}
+inline void FlushRequest::set_path(const char* value, size_t size) {
+  
+  path_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:afs.FlushRequest.path)
+}
+inline ::std::string* FlushRequest::mutable_path() {
+  
+  // @@protoc_insertion_point(field_mutable:afs.FlushRequest.path)
+  return path_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* FlushRequest::release_path() {
+  
+  return path_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void FlushRequest::set_allocated_path(::std::string* path) {
+  if (path != NULL) {
+    
+  } else {
+    
+  }
+  path_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), path);
+  // @@protoc_insertion_point(field_set_allocated:afs.FlushRequest.path)
+}
+
+// optional string data = 2;
+inline void FlushRequest::clear_data() {
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& FlushRequest::data() const {
+  // @@protoc_insertion_point(field_get:afs.FlushRequest.data)
+  return data_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void FlushRequest::set_data(const ::std::string& value) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:afs.FlushRequest.data)
+}
+inline void FlushRequest::set_data(const char* value) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:afs.FlushRequest.data)
+}
+inline void FlushRequest::set_data(const char* value, size_t size) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:afs.FlushRequest.data)
+}
+inline ::std::string* FlushRequest::mutable_data() {
+  
+  // @@protoc_insertion_point(field_mutable:afs.FlushRequest.data)
+  return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* FlushRequest::release_data() {
+  
+  return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void FlushRequest::set_allocated_data(::std::string* data) {
+  if (data != NULL) {
+    
+  } else {
+    
+  }
+  data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
+  // @@protoc_insertion_point(field_set_allocated:afs.FlushRequest.data)
+}
+
+// -------------------------------------------------------------------
+
+// FlushReply
+
+// optional int32 status = 1;
+inline void FlushReply::clear_status() {
+  status_ = 0;
+}
+inline ::google::protobuf::int32 FlushReply::status() const {
+  // @@protoc_insertion_point(field_get:afs.FlushReply.status)
+  return status_;
+}
+inline void FlushReply::set_status(::google::protobuf::int32 value) {
+  
+  status_ = value;
+  // @@protoc_insertion_point(field_set:afs.FlushReply.status)
+}
+
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -18,6 +18,7 @@ static const char* AFS_method_names[] = {
   "/afs.AFS/afs_open",
   "/afs.AFS/afs_getattr",
   "/afs.AFS/afs_readdir",
+  "/afs.AFS/afs_flush",
 };
 
 std::unique_ptr< AFS::Stub> AFS::NewStub(const std::shared_ptr< ::grpc::Channel>& channel, const ::grpc::StubOptions& options) {
@@ -29,6 +30,7 @@ AFS::Stub::Stub(const std::shared_ptr< ::grpc::Channel>& channel)
   : channel_(channel), rpcmethod_afs_open_(AFS_method_names[0], ::grpc::RpcMethod::SERVER_STREAMING, channel)
   , rpcmethod_afs_getattr_(AFS_method_names[1], ::grpc::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_afs_readdir_(AFS_method_names[2], ::grpc::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_afs_flush_(AFS_method_names[3], ::grpc::RpcMethod::CLIENT_STREAMING, channel)
   {}
 
 ::grpc::ClientReader< ::afs::Reply>* AFS::Stub::afs_openRaw(::grpc::ClientContext* context, const ::afs::Request& request) {
@@ -55,7 +57,15 @@ AFS::Stub::Stub(const std::shared_ptr< ::grpc::Channel>& channel)
   return new ::grpc::ClientAsyncResponseReader< ::afs::DirentReply>(channel_.get(), cq, rpcmethod_afs_readdir_, context, request);
 }
 
-AFS::AsyncService::AsyncService() : ::grpc::AsynchronousService(AFS_method_names, 3) {}
+::grpc::ClientWriter< ::afs::FlushRequest>* AFS::Stub::afs_flushRaw(::grpc::ClientContext* context, ::afs::FlushReply* response) {
+  return new ::grpc::ClientWriter< ::afs::FlushRequest>(channel_.get(), rpcmethod_afs_flush_, context, response);
+}
+
+::grpc::ClientAsyncWriter< ::afs::FlushRequest>* AFS::Stub::Asyncafs_flushRaw(::grpc::ClientContext* context, ::afs::FlushReply* response, ::grpc::CompletionQueue* cq, void* tag) {
+  return new ::grpc::ClientAsyncWriter< ::afs::FlushRequest>(channel_.get(), cq, rpcmethod_afs_flush_, context, response, tag);
+}
+
+AFS::AsyncService::AsyncService() : ::grpc::AsynchronousService(AFS_method_names, 4) {}
 
 AFS::Service::Service() {
 }
@@ -96,6 +106,17 @@ void AFS::AsyncService::Requestafs_readdir(::grpc::ServerContext* context, ::afs
   AsynchronousService::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
 }
 
+::grpc::Status AFS::Service::afs_flush(::grpc::ServerContext* context, ::grpc::ServerReader< ::afs::FlushRequest>* reader, ::afs::FlushReply* response) {
+  (void) context;
+  (void) reader;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+void AFS::AsyncService::Requestafs_flush(::grpc::ServerContext* context, ::grpc::ServerAsyncReader< ::afs::FlushReply, ::afs::FlushRequest>* reader, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+  AsynchronousService::RequestClientStreaming(3, context, reader, new_call_cq, notification_cq, tag);
+}
+
 ::grpc::RpcService* AFS::Service::service() {
   if (service_) {
     return service_.get();
@@ -116,6 +137,11 @@ void AFS::AsyncService::Requestafs_readdir(::grpc::ServerContext* context, ::afs
       ::grpc::RpcMethod::NORMAL_RPC,
       new ::grpc::RpcMethodHandler< AFS::Service, ::afs::Request, ::afs::DirentReply>(
           std::mem_fn(&AFS::Service::afs_readdir), this)));
+  service_->AddMethod(new ::grpc::RpcServiceMethod(
+      AFS_method_names[3],
+      ::grpc::RpcMethod::CLIENT_STREAMING,
+      new ::grpc::ClientStreamingHandler< AFS::Service, ::afs::FlushRequest, ::afs::FlushReply>(
+          std::mem_fn(&AFS::Service::afs_flush), this)));
   return service_.get();
 }
 

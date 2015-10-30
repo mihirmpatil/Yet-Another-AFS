@@ -48,12 +48,15 @@ using grpc::Server;
 using grpc::ServerBuilder;
 using grpc::ServerContext;
 using grpc::ServerWriter;
+using grpc::ServerReader;
 using grpc::Status;
 using afs::Request;
 using afs::Reply;
 using afs::DirentReply;
 using afs::Dirent;
 using afs::Stat;
+using afs::FlushRequest;
+using afs::FlushReply;
 using afs::AFS;
 
 // TODO add code to handle path translations
@@ -141,20 +144,28 @@ class AFSServiceImpl final : public AFS::Service {
 		response->set_block_size(st->st_blksize);
 		response->set_blocks(st->st_blocks);
 		
-		std::cout<<"s.st_dev:"<<st->st_dev<<std::endl;
-		std::cout<<"s.st_ino;"<<st->st_ino<<std::endl;
-		std::cout<<"st_mode:"<<st->st_mode<<std::endl;
-		std::cout<<"st_nlink:"<<st->st_nlink<<std::endl;
-		std::cout<<"st_uid:"<<st->st_uid<<std::endl;
-		std::cout<<"st_gid:"<<st->st_gid<<std::endl;
-		std::cout<<"st_rdev:"<<st->st_rdev<<std::endl;
-		std::cout<<"st_size:"<<st->st_size<<std::endl;
-		std::cout<<"st_atime:"<<st->st_atime<<std::endl;
-		std::cout<<"st_mtime:"<<st->st_mtime<<std::endl;
-		std::cout<<"st_ctime:"<<st->st_ctime<<std::endl;
-		std::cout<<"st_blksize:"<<st->st_blksize<<std::endl;
-		std::cout<<"st_blocks:"<<st->st_blocks<<std::endl;
+		return Status::OK;
+	}
 
+	Status afs_flush(ServerContext *context, ServerReader<FlushRequest> *reader, 
+										FlushReply *response) override {
+
+		FlushRequest request;
+
+		reader->Read(&request);
+		std::string path = request.path();
+		std::ofstream file_stream;
+		file_stream.open(path);
+		std::string file_data;
+
+		while (reader->Read(&request)) {
+			file_data = request.data();
+			file_stream << file_data;
+		}
+
+
+		file_stream.close();
+		response->set_status(0);
 		return Status::OK;
 	}
 

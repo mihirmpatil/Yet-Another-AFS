@@ -42,19 +42,24 @@
 #include "afs.grpc.pb.h"
 #include "afs_fuse_structs.h"
 
+#define BUF_LEN 1024
 using grpc::Channel;
 using grpc::ClientContext;
 using grpc::ClientReader;
+using grpc::ClientWriter;
 using grpc::Status;
 using afs::Request;
 using afs::Reply;
 using afs::Dirent;
 using afs::DirentReply;
 using afs::Stat;
+using afs::FlushRequest;
+using afs::FlushReply;
 using afs::AFS;
 
 class AFSClient {
  public:
+  std::string cache_path = "/tmp/cache";
   AFSClient(std::shared_ptr<Channel> channel)
       : stub_(AFS::NewStub(channel)) {}
 
@@ -73,17 +78,17 @@ class AFSClient {
     ClientContext context;
 
     //Local AFS cache file handling
-		std::ofstream file_stream;
-    file_stream.open(path);
+    std::ofstream file_stream;
+		// TODO handle directory structure if it doesnt exist inside the cache
+    file_stream.open(cache_path + path);
 
     // The actual RPC.
-		std::cout << "The actual GRPC" << std::endl;
-//    Status status = stub_->afs_open(&context, request, &reply);
+    std::cout << "The actual GRPC for " << cache_path + path << std::endl;
+    // Status status = stub_->afs_open(&context, request, &reply);
     std::unique_ptr<ClientReader<Reply>> reader(stub_->afs_open(&context, request));
     while (reader->Read(&reply)) {
-      //TODO think about handling metadata(maybe perform a separate rpc call)
       //save the file locally
-      //file_stream << reply.data();
+      file_stream << reply.data();
 			std::cout << reply.data() << std::endl;
     }
 
@@ -141,22 +146,35 @@ class AFSClient {
 		st->st_blksize = s.block_size();
 		st->st_blocks = s.blocks();
 
-		std::cout<<"s.st_dev:"<<st->st_dev<<std::endl;
-		std::cout<<"s.st_ino;"<<st->st_ino<<std::endl;
-		std::cout<<"st_mode:"<<st->st_mode<<std::endl;
-		std::cout<<"st_nlink:"<<st->st_nlink<<std::endl;
-		std::cout<<"st_uid:"<<st->st_uid<<std::endl;
-		std::cout<<"st_gid:"<<st->st_gid<<std::endl;
-		std::cout<<"st_rdev:"<<st->st_rdev<<std::endl;
-		std::cout<<"st_size:"<<st->st_size<<std::endl;
-		std::cout<<"st_atime:"<<st->st_atime<<std::endl;
-		std::cout<<"st_mtime:"<<st->st_mtime<<std::endl;
-		std::cout<<"st_ctime:"<<st->st_ctime<<std::endl;
-		std::cout<<"st_blksize:"<<st->st_blksize<<std::endl;
-		std::cout<<"st_blocks:"<<st->st_blocks<<std::endl;
-
 		return st;
 
+	}
+
+	int afs_flush(const std::string& path) {
+		
+		FlushRequest request;
+		FlushReply response;
+		ClientContext context;
+		request.set_path(path);
+		std::unique_ptr<ClientWriter<FlushRequest> > writer(
+											stub_->afs_flush(&context, &response));
+		
+		// send path
+		writer->Write(request);
+
+		std::ifstream file_stream;
+		file_stream.open(cache_path + path);
+		char *buffer = new char[BUF_LEN];
+		while (!file_stream.eof()) {
+			file_stream.read(buffer, BUF_LEN);
+			std::string file_data = buffer;
+			request.set_data(file_data);
+			writer->Write(request);
+		}
+		writer->WritesDone();
+		file_stream.close();
+		delete[] buffer;
+		return 0;
 	}
 
  private:
@@ -184,5 +202,12 @@ extern "C" struct stat* grpc_afs_getattr(const char *path, struct stat *s) {
   AFSClient client(
       grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
   s = client.afs_getattr(path);
+	return s;
+}
+
+extern "C" int grpc_afs_flush(const char *path) {
+  AFSClient client(
+      grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+  int s = client.afs_flush(path);
 	return s;
 }
