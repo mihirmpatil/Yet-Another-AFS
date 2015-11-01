@@ -14,30 +14,23 @@
 #define SUCCESS 0
 
 
-char prefixed_path[1024];
+char cache_path[1024];
 
 // TODO implement this function
 static int afs_getattr(const char *path, struct stat *stbuf)
 {
 	int res;
+	char prefixed_path[1024];
 
-	//res = lstat(path, stbuf);
-	//if (res == -1) 
-	struct stat *s = grpc_afs_getattr(path, stbuf);
-	
-	stbuf->st_dev = s->st_dev;
-	stbuf->st_ino = s->st_ino;
-	stbuf->st_mode = s->st_mode;
-	stbuf->st_nlink = s->st_nlink;
-	stbuf->st_uid = s->st_uid;
-	stbuf->st_gid = s->st_gid;
-	stbuf->st_rdev = s->st_rdev;
-	stbuf->st_size = s->st_size;
-	stbuf->st_atime = s->st_atime;
-	stbuf->st_mtime = s->st_mtime;
-	stbuf->st_ctime = s->st_ctime;
-	stbuf->st_blksize = s->st_blksize;
-	stbuf->st_blocks = s->st_blocks;
+	strcpy(prefixed_path, cache_path);
+	strcat(prefixed_path, path);
+
+	if(lstat(prefixed_path, stbuf) == -1){
+		if(grpc_afs_getattr(path, &stbuf, cache_path) == -1){
+			lstat(prefixed_path, stbuf);
+			return -errno;
+		}
+	}
 
 	return 0;
 }
@@ -83,13 +76,13 @@ static int afs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 
 static int afs_open(const char *path, struct fuse_file_info *fi)
 {
-  // check if local file exists
-  // check if the local file is the updated version as the server
-  // if not exists or not updated make grpc call
+	// check if local file exists
+	// check if the local file is the updated version as the server
+	// if not exists or not updated make grpc call
 	printf("In afs_open inside fuse client for %s\n",path);
-  grpc_afs_open(path);
-  // save file locally - handle this in grpc client itself to avoid passing data here
-  return SUCCESS;
+	grpc_afs_open(path);
+	// save file locally - handle this in grpc client itself to avoid passing data here
+	return SUCCESS;
 }
 
 static int afs_read(const char *path, char *buf, size_t size, off_t offset,
@@ -119,18 +112,18 @@ static int afs_write(const char *path, const char *buf, size_t size,
 	char prefixed_path[1024];
 	strcpy(prefixed_path, "/tmp/cache");
 	strcat(prefixed_path, path);
-	
+
 	printf("\nThe file opened for writing is: %s\n",prefixed_path);
 	printf("\nBuff: %s\nsize: %d\noffset: %d\n",buf,(int)size,(int)offset);
-	
+
 	fd = open(prefixed_path, O_WRONLY);
 	if (fd == -1){
-	        printf("\nUnable to open the file");
+		printf("\nUnable to open the file");
 		return -errno;
 	}
 	res = pwrite(fd, buf, size, offset);
 	if (res == -1){
-	        printf("\nUnable to write to the file");
+		printf("\nUnable to write to the file");
 		res = -errno;
 	}
 	close(fd);
@@ -140,29 +133,63 @@ static int afs_write(const char *path, const char *buf, size_t size,
 static int afs_flush(const char *path, struct fuse_file_info *fi)
 {
 	int res = 0;
-	// TODO push file to server here
+	// upload file to server always 
 
 	/*char prefixed_path[1024];
-	strcpy(prefixed_path, "/tmp/cache");
-	strcat(prefixed_path, path);*/
-	
+		strcpy(prefixed_path, "/tmp/cache");
+		strcat(prefixed_path, path);*/
+
 	printf("\nCalling grpc flush on file: %s\n",path);
 
 	res = grpc_afs_flush(path);
 	return res;
 }
 
+static int afs_rmdir(const char *path){
+	int res = 0;
+
+	res = grpc_afs_rmdir(path);
+	return res;
+}
+
+static int afs_mkdir(const char *path, mode_t mode){
+	int res = 0;
+
+	res = grpc_afs_mkdir(path);
+	return res;
+}
+
 // FUSE operations table
 static struct fuse_operations afs_oper = {
-  .getattr = afs_getattr,
+	.getattr = afs_getattr,
 	.readdir = afs_readdir,
 	.open = afs_open,
 	.read = afs_read,
 	.write = afs_write,
 	.flush = afs_flush,
+	.mkdir = afs_mkdir,
+	.rmdir = afs_rmdir,
 };
 
 int main(int argc, char *argv[]) {
-	//grpc_afs_open("random_file");
-  return fuse_main(argc, argv, &afs_oper, NULL);
+
+	if(argc < 3){
+		printf("Usage: ./executable <cache-path> <mount-point> <optional-parameters>");
+		return 0;
+	}
+
+	char *fuse_parameters[10];
+	int i;
+
+	strcpy(cache_path,argv[1]);
+	fuse_parameters[0] = argv[0];
+
+	for(i=2;i<argc;i++){
+		// Skip for cache path
+		if(i == 1)
+			continue;
+		fuse_parameters[i-1] = argv[i];
+	}
+
+	return fuse_main(argc-1, fuse_parameters, &afs_oper, NULL);
 }

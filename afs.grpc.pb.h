@@ -50,6 +50,14 @@ class AFS GRPC_FINAL {
     std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::afs::FlushRequest>> Asyncafs_flush(::grpc::ClientContext* context, ::afs::FlushReply* response, ::grpc::CompletionQueue* cq, void* tag) {
       return std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::afs::FlushRequest>>(Asyncafs_flushRaw(context, response, cq, tag));
     }
+    virtual ::grpc::Status afs_rmdir(::grpc::ClientContext* context, const ::afs::Request& request, ::afs::StatusReply* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::afs::StatusReply>> Asyncafs_rmdir(::grpc::ClientContext* context, const ::afs::Request& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::afs::StatusReply>>(Asyncafs_rmdirRaw(context, request, cq));
+    }
+    virtual ::grpc::Status afs_mkdir(::grpc::ClientContext* context, const ::afs::Request& request, ::afs::StatusReply* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::afs::StatusReply>> Asyncafs_mkdir(::grpc::ClientContext* context, const ::afs::Request& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::afs::StatusReply>>(Asyncafs_mkdirRaw(context, request, cq));
+    }
   private:
     virtual ::grpc::ClientReaderInterface< ::afs::Reply>* afs_openRaw(::grpc::ClientContext* context, const ::afs::Request& request) = 0;
     virtual ::grpc::ClientAsyncReaderInterface< ::afs::Reply>* Asyncafs_openRaw(::grpc::ClientContext* context, const ::afs::Request& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
@@ -57,6 +65,8 @@ class AFS GRPC_FINAL {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::afs::DirentReply>* Asyncafs_readdirRaw(::grpc::ClientContext* context, const ::afs::Request& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientWriterInterface< ::afs::FlushRequest>* afs_flushRaw(::grpc::ClientContext* context, ::afs::FlushReply* response) = 0;
     virtual ::grpc::ClientAsyncWriterInterface< ::afs::FlushRequest>* Asyncafs_flushRaw(::grpc::ClientContext* context, ::afs::FlushReply* response, ::grpc::CompletionQueue* cq, void* tag) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::afs::StatusReply>* Asyncafs_rmdirRaw(::grpc::ClientContext* context, const ::afs::Request& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::afs::StatusReply>* Asyncafs_mkdirRaw(::grpc::ClientContext* context, const ::afs::Request& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub GRPC_FINAL : public StubInterface {
    public:
@@ -81,6 +91,14 @@ class AFS GRPC_FINAL {
     std::unique_ptr< ::grpc::ClientAsyncWriter< ::afs::FlushRequest>> Asyncafs_flush(::grpc::ClientContext* context, ::afs::FlushReply* response, ::grpc::CompletionQueue* cq, void* tag) {
       return std::unique_ptr< ::grpc::ClientAsyncWriter< ::afs::FlushRequest>>(Asyncafs_flushRaw(context, response, cq, tag));
     }
+    ::grpc::Status afs_rmdir(::grpc::ClientContext* context, const ::afs::Request& request, ::afs::StatusReply* response) GRPC_OVERRIDE;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::afs::StatusReply>> Asyncafs_rmdir(::grpc::ClientContext* context, const ::afs::Request& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::afs::StatusReply>>(Asyncafs_rmdirRaw(context, request, cq));
+    }
+    ::grpc::Status afs_mkdir(::grpc::ClientContext* context, const ::afs::Request& request, ::afs::StatusReply* response) GRPC_OVERRIDE;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::afs::StatusReply>> Asyncafs_mkdir(::grpc::ClientContext* context, const ::afs::Request& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::afs::StatusReply>>(Asyncafs_mkdirRaw(context, request, cq));
+    }
 
    private:
     std::shared_ptr< ::grpc::Channel> channel_;
@@ -90,10 +108,14 @@ class AFS GRPC_FINAL {
     ::grpc::ClientAsyncResponseReader< ::afs::DirentReply>* Asyncafs_readdirRaw(::grpc::ClientContext* context, const ::afs::Request& request, ::grpc::CompletionQueue* cq) GRPC_OVERRIDE;
     ::grpc::ClientWriter< ::afs::FlushRequest>* afs_flushRaw(::grpc::ClientContext* context, ::afs::FlushReply* response) GRPC_OVERRIDE;
     ::grpc::ClientAsyncWriter< ::afs::FlushRequest>* Asyncafs_flushRaw(::grpc::ClientContext* context, ::afs::FlushReply* response, ::grpc::CompletionQueue* cq, void* tag) GRPC_OVERRIDE;
+    ::grpc::ClientAsyncResponseReader< ::afs::StatusReply>* Asyncafs_rmdirRaw(::grpc::ClientContext* context, const ::afs::Request& request, ::grpc::CompletionQueue* cq) GRPC_OVERRIDE;
+    ::grpc::ClientAsyncResponseReader< ::afs::StatusReply>* Asyncafs_mkdirRaw(::grpc::ClientContext* context, const ::afs::Request& request, ::grpc::CompletionQueue* cq) GRPC_OVERRIDE;
     const ::grpc::RpcMethod rpcmethod_afs_open_;
     const ::grpc::RpcMethod rpcmethod_afs_getattr_;
     const ::grpc::RpcMethod rpcmethod_afs_readdir_;
     const ::grpc::RpcMethod rpcmethod_afs_flush_;
+    const ::grpc::RpcMethod rpcmethod_afs_rmdir_;
+    const ::grpc::RpcMethod rpcmethod_afs_mkdir_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::Channel>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -105,6 +127,8 @@ class AFS GRPC_FINAL {
     virtual ::grpc::Status afs_getattr(::grpc::ServerContext* context, const ::afs::Request* request, ::afs::Stat* response);
     virtual ::grpc::Status afs_readdir(::grpc::ServerContext* context, const ::afs::Request* request, ::afs::DirentReply* response);
     virtual ::grpc::Status afs_flush(::grpc::ServerContext* context, ::grpc::ServerReader< ::afs::FlushRequest>* reader, ::afs::FlushReply* response);
+    virtual ::grpc::Status afs_rmdir(::grpc::ServerContext* context, const ::afs::Request* request, ::afs::StatusReply* response);
+    virtual ::grpc::Status afs_mkdir(::grpc::ServerContext* context, const ::afs::Request* request, ::afs::StatusReply* response);
     ::grpc::RpcService* service() GRPC_OVERRIDE GRPC_FINAL;
    private:
     std::unique_ptr< ::grpc::RpcService> service_;
@@ -117,6 +141,8 @@ class AFS GRPC_FINAL {
     void Requestafs_getattr(::grpc::ServerContext* context, ::afs::Request* request, ::grpc::ServerAsyncResponseWriter< ::afs::Stat>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag);
     void Requestafs_readdir(::grpc::ServerContext* context, ::afs::Request* request, ::grpc::ServerAsyncResponseWriter< ::afs::DirentReply>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag);
     void Requestafs_flush(::grpc::ServerContext* context, ::grpc::ServerAsyncReader< ::afs::FlushReply, ::afs::FlushRequest>* reader, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag);
+    void Requestafs_rmdir(::grpc::ServerContext* context, ::afs::Request* request, ::grpc::ServerAsyncResponseWriter< ::afs::StatusReply>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag);
+    void Requestafs_mkdir(::grpc::ServerContext* context, ::afs::Request* request, ::grpc::ServerAsyncResponseWriter< ::afs::StatusReply>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag);
   };
 };
 

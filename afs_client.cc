@@ -48,6 +48,8 @@ using grpc::ClientContext;
 using grpc::ClientReader;
 using grpc::ClientWriter;
 using grpc::Status;
+using grpc::StatusCode;
+using afs::StatusReply;
 using afs::Request;
 using afs::Reply;
 using afs::Dirent;
@@ -123,30 +125,38 @@ class AFSClient {
 		return dirent_arr;
 	}
 
-	struct stat* afs_getattr(const std::string& path) {
+  int afs_getattr(const std::string& path, struct stat **st, const std::string& cache_path) {
 	
 		Request request;
 		request.set_name(path);
 		Stat s;
 		ClientContext context;
 
+		std::cout<<"\nDoing grpc call to getattr for path:"<<path;
+		//return lstat(path.c_str(),*st);
 		Status status = stub_->afs_getattr(&context, request, &s);
-		struct stat *st = (struct stat*)malloc(sizeof(struct stat));
-		st->st_dev = s.dev();
-		st->st_ino = s.ino();
-		st->st_mode = s.mode();
-		st->st_nlink = s.nlink();
-		st->st_uid = s.uid();
-		st->st_gid = s.gid();
-		st->st_rdev = s.rdev();
-		st->st_size = s.size();
-		st->st_atime = s.a_time();
-		st->st_mtime = s.m_time();
-		st->st_ctime = s.c_time();
-		st->st_blksize = s.block_size();
-		st->st_blocks = s.blocks();
 
-		return st;
+		(*st)->st_dev = s.dev();
+		(*st)->st_ino = s.ino();
+		(*st)->st_mode = s.mode();
+		(*st)->st_nlink = s.nlink();
+		(*st)->st_uid = s.uid();
+		(*st)->st_gid = s.gid();
+		(*st)->st_rdev = s.rdev();
+		(*st)->st_size = s.size();
+		(*st)->st_atime = s.a_time();
+		(*st)->st_mtime = s.m_time();
+		(*st)->st_ctime = s.c_time();
+		(*st)->st_blksize = s.block_size();
+		(*st)->st_blocks = s.blocks();
+
+		if(status.error_code() == 1){ //StatusCode.CANCELLED
+		  std::cout<<"\nReturning -1 in getattr for path:"<<path;
+		  return -1;
+		}
+		
+		std::cout<<"\nReturning 0 in getattr for path:"<<path;
+		return 0;
 
 	}
 
@@ -192,6 +202,28 @@ class AFSClient {
 		return 0;
 	}
 
+        int afs_mkdir(const std::string& path) {
+	        Request request;
+		StatusReply reply;
+
+		request.set_name(path);
+		ClientContext context;
+
+		Status status = stub_->afs_mkdir(&context, request, &reply);
+		return reply.status();
+	}
+
+        int afs_rmdir(const std::string& path) {
+	        Request request;
+		StatusReply reply;
+
+		request.set_name(path);
+		ClientContext context;
+
+		Status status = stub_->afs_rmdir(&context, request, &reply);
+		return reply.status();
+	}
+
  private:
   std::unique_ptr<AFS::Stub> stub_;
 };
@@ -213,16 +245,29 @@ extern "C" struct afs_dirent* grpc_afs_readdir(const char *path) {
 	return r;
 }
 
-extern "C" struct stat* grpc_afs_getattr(const char *path, struct stat *s) {
+extern "C" int grpc_afs_getattr(const char *path, struct stat **s, const char *cache_path) {
   AFSClient client(
       grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
-  s = client.afs_getattr(path);
-	return s;
+  return client.afs_getattr(path, s, cache_path);
 }
 
 extern "C" int grpc_afs_flush(const char *path) {
   AFSClient client(
       grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
   int s = client.afs_flush(path);
+	return s;
+}
+
+extern "C" int grpc_afs_mkdir(const char *path) {
+  AFSClient client(
+      grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+  int s = client.afs_mkdir(path);
+	return s;
+}
+
+extern "C" int grpc_afs_rmdir(const char *path) {
+  AFSClient client(
+      grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+  int s = client.afs_rmdir(path);
 	return s;
 }

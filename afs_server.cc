@@ -41,6 +41,8 @@
 #include "afs.grpc.pb.h"
 #include "dirent.h"
 #include "sys/stat.h"
+#include "unistd.h"
+#include "sys/types.h"
 
 #define BUF_LEN 1024
 
@@ -52,6 +54,7 @@ using grpc::ServerReader;
 using grpc::Status;
 using afs::Request;
 using afs::Reply;
+using afs::StatusReply;
 using afs::DirentReply;
 using afs::Dirent;
 using afs::Stat;
@@ -60,7 +63,7 @@ using afs::FlushReply;
 using afs::AFS;
 
 // TODO add code to handle path translations
-
+std::string afs_root;
 
 // Logic and data behind the server's behavior.
 class AFSServiceImpl final : public AFS::Service {
@@ -69,28 +72,29 @@ class AFSServiceImpl final : public AFS::Service {
     
 		
 		Reply reply;
-		std::string path = request->name();
-		std::cout << "in afs_open for " << path << std::endl;
-		
+		std::cout << "in afs_open for " << request->name() << std::endl;
 		std::ifstream file_stream;
-		//std::string& buffer;
 		char *buffer = new char [BUF_LEN];
-		file_stream.open(path);
+
+		file_stream.open(afs_root + request->name());
+
 		while (!file_stream.eof()) {
+
 			file_stream.read(buffer, BUF_LEN);
 			std::string data = buffer;
 			reply.set_data(data);
 			writer->Write(reply);
 		}
+
 		file_stream.close();
 		
-    return Status::OK;
+		return Status::OK;
   }
 
 	Status afs_readdir(ServerContext* context, const Request* request,
 									DirentReply* response) override {
 		
-		std::string path = request->name();
+		std::string path = afs_root + request->name();
 		DIR *dp;
 		struct dirent *de;
 		//(void) offset;
@@ -121,14 +125,12 @@ class AFSServiceImpl final : public AFS::Service {
 	Status afs_getattr(ServerContext *context, const Request* request, 
 									Stat *response) override {
 		
-		std::string path = request->name();
+		std::string path = afs_root + request->name();
 		//path = "/tmp/server/random_file";
 		std::cout<<"Requested path:"<<path<<"\n";
 
 		struct stat *st = (struct stat*)malloc(sizeof(struct stat));
 		int res = lstat(path.c_str(), st);
-		//if (res == -1)
-		//	return Status::NOT_FOUND;
 		
 		response->set_dev(st->st_dev);
 		response->set_ino(st->st_ino);
@@ -144,6 +146,12 @@ class AFSServiceImpl final : public AFS::Service {
 		response->set_block_size(st->st_blksize);
 		response->set_blocks(st->st_blocks);
 		
+		if (res == -1){
+		       return Status::CANCELLED;
+		}
+		/*else
+		response->set_success(0);*/
+
 		return Status::OK;
 	}
 
@@ -153,11 +161,14 @@ class AFSServiceImpl final : public AFS::Service {
 		FlushRequest request;
 
 		reader->Read(&request);
-		std::string path = request.path();
+
+		std::string path = afs_root + request.path();
 		std::ofstream file_stream;
+		std::string file_data;
+
 		std::cout<<"\nOpening file to write: "<<path;
 		file_stream.open(path);
-		std::string file_data;
+		
 
 		while (reader->Read(&request)) {
 			file_data = request.data();
@@ -172,12 +183,36 @@ class AFSServiceImpl final : public AFS::Service {
 		return Status::OK;
 	}
 
+	Status afs_rmdir(ServerContext *context, const Request* request, StatusReply* response){
+	        struct stat dirstat;
+		std::string path = afs_root + request->name();
+		int res = lstat(path.c_str(), &dirstat);
+		
+		if(res == -1){
+		  response->set_status(-2);
+		}
+		else{
+		  response->set_status(rmdir(path.c_str()));
+		}
+		
+		return Status::OK;
+	}
+
+	Status afs_mkdir(ServerContext *context, const Request* request, StatusReply* response){
+
+	  std::cout<<"\nRequested to make path: "<<request->name();
+	  int ret = mkdir((afs_root+request->name()).c_str(),S_IRWXO);
+	  response->set_status(ret);
+	  return Status::OK;
+
+	}
+
 };
 
 void RunServer() {
   std::string server_address("0.0.0.0:50051");
   AFSServiceImpl service;
-
+  
   ServerBuilder builder;
   // Listen on the given address without any authentication mechanism.
   builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
@@ -187,15 +222,27 @@ void RunServer() {
   // Finally assemble the server.
   std::unique_ptr<Server> server(builder.BuildAndStart());
   std::cout << "Server listening on " << server_address << std::endl;
-
+  
   // Wait for the server to shutdown. Note that some other thread must be
   // responsible for shutting down the server for this call to ever return.
   server->Wait();
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char* argv[]) {
 	// TODO take path as input from command line and monitor that path
-  RunServer();
+        if(argc != 2){
+	    std::cout<<"Usage: ./<executable> <afs_root_path>";
+	    return 0;
+	}
 
-  return 0;
+	afs_root = argv[1];
+
+        if(afs_root[afs_root.length()-1] == '/'){
+	  afs_root = afs_root.substr(0,afs_root.length()-1);
+	  afs_root = "";
+        }
+
+        RunServer();
+
+	return 0;
 }

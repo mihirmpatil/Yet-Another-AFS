@@ -43,6 +43,7 @@ class FlushRequest;
 class Reply;
 class Request;
 class Stat;
+class StatusReply;
 
 // ===================================================================
 
@@ -733,6 +734,84 @@ class FlushReply : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static FlushReply* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class StatusReply : public ::google::protobuf::Message {
+ public:
+  StatusReply();
+  virtual ~StatusReply();
+
+  StatusReply(const StatusReply& from);
+
+  inline StatusReply& operator=(const StatusReply& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const StatusReply& default_instance();
+
+  void Swap(StatusReply* other);
+
+  // implements Message ----------------------------------------------
+
+  inline StatusReply* New() const { return New(NULL); }
+
+  StatusReply* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const StatusReply& from);
+  void MergeFrom(const StatusReply& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(StatusReply* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 status = 1;
+  void clear_status();
+  static const int kStatusFieldNumber = 1;
+  ::google::protobuf::int32 status() const;
+  void set_status(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:afs.StatusReply)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::int32 status_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_afs_2eproto();
+  friend void protobuf_AssignDesc_afs_2eproto();
+  friend void protobuf_ShutdownFile_afs_2eproto();
+
+  void InitAsDefaultInstance();
+  static StatusReply* default_instance_;
+};
 // ===================================================================
 
 
@@ -1248,7 +1327,27 @@ inline void FlushReply::set_status(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:afs.FlushReply.status)
 }
 
+// -------------------------------------------------------------------
+
+// StatusReply
+
+// optional int32 status = 1;
+inline void StatusReply::clear_status() {
+  status_ = 0;
+}
+inline ::google::protobuf::int32 StatusReply::status() const {
+  // @@protoc_insertion_point(field_get:afs.StatusReply.status)
+  return status_;
+}
+inline void StatusReply::set_status(::google::protobuf::int32 value) {
+  
+  status_ = value;
+  // @@protoc_insertion_point(field_set:afs.StatusReply.status)
+}
+
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

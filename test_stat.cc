@@ -7,7 +7,9 @@ using namespace std;
 
 int main(){
   struct stat s;
-  lstat("/tmp/afs/tmp/server/random_file",&s);
+  int getattrret = getattr("/tmp/tmp",&s);
+
+  cout<<"\nlstatret = "<<getattr<<endl;
 
   cout<<"s.st_dev:"<<s.st_dev<<endl;
   cout<<"s.st_ino;"<<s.st_ino<<endl;
