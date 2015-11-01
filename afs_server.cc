@@ -59,18 +59,18 @@ using afs::DirentReply;
 using afs::Dirent;
 using afs::Stat;
 using afs::FlushRequest;
+using afs::RenameRequest;
 using afs::FlushReply;
 using afs::AFS;
 
-// TODO add code to handle path translations
 std::string afs_root;
 
 // Logic and data behind the server's behavior.
 class AFSServiceImpl final : public AFS::Service {
-  Status afs_open(ServerContext* context, const Request* request,
-                 ServerWriter<Reply>* writer) override {
-    
-		
+	Status afs_open(ServerContext* context, const Request* request,
+			ServerWriter<Reply>* writer) override {
+
+
 		Reply reply;
 		std::cout << "in afs_open for " << request->name() << std::endl;
 		std::ifstream file_stream;
@@ -87,13 +87,13 @@ class AFSServiceImpl final : public AFS::Service {
 		}
 
 		file_stream.close();
-		
+
 		return Status::OK;
-  }
+	}
 
 	Status afs_readdir(ServerContext* context, const Request* request,
-									DirentReply* response) override {
-		
+			DirentReply* response) override {
+
 		std::string path = afs_root + request->name();
 		DIR *dp;
 		struct dirent *de;
@@ -118,20 +118,20 @@ class AFSServiceImpl final : public AFS::Service {
 		}
 		response->set_count(count);
 		closedir(dp);
-		
+
 		return Status::OK;
 	}
 
 	Status afs_getattr(ServerContext *context, const Request* request, 
-									Stat *response) override {
-		
+			Stat *response) override {
+
 		std::string path = afs_root + request->name();
 		//path = "/tmp/server/random_file";
 		std::cout<<"Requested path:"<<path<<"\n";
 
 		struct stat *st = (struct stat*)malloc(sizeof(struct stat));
 		int res = lstat(path.c_str(), st);
-		
+
 		response->set_dev(st->st_dev);
 		response->set_ino(st->st_ino);
 		response->set_mode(st->st_mode);
@@ -145,18 +145,18 @@ class AFSServiceImpl final : public AFS::Service {
 		response->set_c_time(st->st_ctime);
 		response->set_block_size(st->st_blksize);
 		response->set_blocks(st->st_blocks);
-		
+
 		if (res == -1){
-		       return Status::CANCELLED;
+			return Status::CANCELLED;
 		}
 		/*else
-		response->set_success(0);*/
+			response->set_success(0);*/
 
 		return Status::OK;
 	}
 
 	Status afs_flush(ServerContext *context, ServerReader<FlushRequest> *reader, 
-										FlushReply *response) override {
+			FlushReply *response) override {
 
 		FlushRequest request;
 
@@ -168,14 +168,14 @@ class AFSServiceImpl final : public AFS::Service {
 
 		std::cout<<"\nOpening file to write: "<<path;
 		file_stream.open(path);
-		
+
 
 		while (reader->Read(&request)) {
 			file_data = request.data();
 			std::cout<<"\nWriting data:"<<file_data;
 			file_stream << file_data;
 		}
-		
+
 		std::cout<<"\nFinished writing the file";
 
 		file_stream.close();
@@ -184,65 +184,78 @@ class AFSServiceImpl final : public AFS::Service {
 	}
 
 	Status afs_rmdir(ServerContext *context, const Request* request, StatusReply* response){
-	        struct stat dirstat;
+		struct stat dirstat;
 		std::string path = afs_root + request->name();
 		int res = lstat(path.c_str(), &dirstat);
-		
+
 		if(res == -1){
-		  response->set_status(-2);
+			response->set_status(-2);
 		}
 		else{
-		  response->set_status(rmdir(path.c_str()));
+			response->set_status(rmdir(path.c_str()));
 		}
-		
+
 		return Status::OK;
 	}
 
 	Status afs_mkdir(ServerContext *context, const Request* request, StatusReply* response){
 
-	  std::cout<<"\nRequested to make path: "<<request->name();
-	  int ret = mkdir((afs_root+request->name()).c_str(),S_IRWXO);
-	  response->set_status(ret);
-	  return Status::OK;
+		std::cout<<"\nRequested to make path: "<<request->name();
+		int ret = mkdir((afs_root+request->name()).c_str(),S_IRWXO);
+		response->set_status(ret);
+		return Status::OK;
 
 	}
 
+	Status afs_unlink(ServerContext *context, const Request* request, StatusReply* response){
+
+		int ret = unlink((afs_root + request->name()).c_str());
+		response->set_status(ret);
+		return Status::OK;
+	}
+
+	Status afs_rename(ServerContext *context, const RenameRequest* request, StatusReply* response){
+//		char *from = (afs_root + request->old_name()).c_str();
+//		char *to = (afs_root + request->new_name()).c_str();
+		int ret = rename((afs_root + request->old_name()).c_str(), (afs_root + request->new_name()).c_str());
+		response->set_status(ret);
+		return Status::OK;
+	}
 };
 
 void RunServer() {
-  std::string server_address("0.0.0.0:50051");
-  AFSServiceImpl service;
-  
-  ServerBuilder builder;
-  // Listen on the given address without any authentication mechanism.
-  builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
-  // Register "service" as the instance through which we'll communicate with
-  // clients. In this case it corresponds to an *synchronous* service.
-  builder.RegisterService(&service);
-  // Finally assemble the server.
-  std::unique_ptr<Server> server(builder.BuildAndStart());
-  std::cout << "Server listening on " << server_address << std::endl;
-  
-  // Wait for the server to shutdown. Note that some other thread must be
-  // responsible for shutting down the server for this call to ever return.
-  server->Wait();
+	std::string server_address("0.0.0.0:50051");
+	AFSServiceImpl service;
+
+	ServerBuilder builder;
+	// Listen on the given address without any authentication mechanism.
+	builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+	// Register "service" as the instance through which we'll communicate with
+	// clients. In this case it corresponds to an *synchronous* service.
+	builder.RegisterService(&service);
+	// Finally assemble the server.
+	std::unique_ptr<Server> server(builder.BuildAndStart());
+	std::cout << "Server listening on " << server_address << std::endl;
+
+	// Wait for the server to shutdown. Note that some other thread must be
+	// responsible for shutting down the server for this call to ever return.
+	server->Wait();
 }
 
 int main(int argc, char* argv[]) {
-	// TODO take path as input from command line and monitor that path
-        if(argc != 2){
-	    std::cout<<"Usage: ./<executable> <afs_root_path>";
-	    return 0;
+	if(argc != 2){
+		std::cout<<"Usage: ./<executable> <afs_root_path>" << std::endl;
+		return 0;
 	}
 
 	afs_root = argv[1];
 
-        if(afs_root[afs_root.length()-1] == '/'){
-	  afs_root = afs_root.substr(0,afs_root.length()-1);
-	  afs_root = "";
-        }
+	if(afs_root[afs_root.length()-1] == '/'){
+		afs_root = afs_root.substr(0,afs_root.length()-1);
+		//afs_root = "";
+	}
 
-        RunServer();
+	RunServer();
 
 	return 0;
 }

@@ -2,6 +2,7 @@
 
 #include <fuse.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -25,13 +26,19 @@ static int afs_getattr(const char *path, struct stat *stbuf)
 	strcpy(prefixed_path, cache_path);
 	strcat(prefixed_path, path);
 
+	struct stat *remote_stat = (struct stat *)malloc(sizeof(struct stat));
+	int remote_return = grpc_afs_getattr(path, &remote_stat, cache_path);
+	int local_return = lstat(prefixed_path, stbuf);
+	if (remote_return == -1 && local_return == -1)
+		return -errno;
+/*
 	if(lstat(prefixed_path, stbuf) == -1){
 		if(grpc_afs_getattr(path, &stbuf, cache_path) == -1){
 			lstat(prefixed_path, stbuf);
 			return -errno;
 		}
 	}
-
+*/
 	return 0;
 }
 
@@ -103,6 +110,7 @@ static int afs_read(const char *path, char *buf, size_t size, off_t offset,
 	close(fd);
 	return res;
 }
+
 static int afs_write(const char *path, const char *buf, size_t size,
 		off_t offset, struct fuse_file_info *fi)
 {
@@ -145,18 +153,119 @@ static int afs_flush(const char *path, struct fuse_file_info *fi)
 	return res;
 }
 
-static int afs_rmdir(const char *path){
+static int afs_rmdir(const char *path)
+{
 	int res = 0;
 
+	char prefixed_path[1024];
+	strcpy(prefixed_path, "/tmp/cache");
+	strcat(prefixed_path, path);
+
+	res = rmdir(prefixed_path);
 	res = grpc_afs_rmdir(path);
 	return res;
 }
 
-static int afs_mkdir(const char *path, mode_t mode){
+static int afs_mkdir(const char *path, mode_t mode)
+{
 	int res = 0;
 
+	char prefixed_path[1024];
+	strcpy(prefixed_path, "/tmp/cache");
+	strcat(prefixed_path, path);
+
+	res = mkdir(prefixed_path, S_IRWXO);
 	res = grpc_afs_mkdir(path);
 	return res;
+}
+
+int afs_mknod(const char *path, mode_t mode, dev_t rdev) 
+{
+	int res;
+	char prefixed_path[1024];
+	strcpy(prefixed_path, "/tmp/cache");
+	strcat(prefixed_path, path);
+
+	if (S_ISREG(mode)) {
+		res = open(prefixed_path, O_CREAT | O_EXCL | O_WRONLY, mode);
+		if (res >= 0)
+			res = close(res);
+	} 
+	else
+		res = mknod(prefixed_path, mode, rdev);
+	if (res == -1)
+		return -errno;
+	return 0;
+}
+
+static int afs_unlink(const char *path) 
+{
+	int res;
+	char prefixed_path[1024];
+	strcpy(prefixed_path, "/tmp/cache");
+	strcat(prefixed_path, path);
+
+	res = unlink(prefixed_path);
+	res = grpc_afs_unlink(path);
+	if (res == -1)
+		return -errno;
+	return 0;
+}
+
+static int afs_rename(const char *from, const char *to) 
+{
+	int res;
+	char prefixed_path[1024];
+	strcpy(prefixed_path, "/tmp/cache");
+	strcat(prefixed_path, from);
+	char prefixed_to[1024];
+	strcpy(prefixed_to, "/tmp/cache");
+	strcat(prefixed_to, to);
+
+	res = rename(prefixed_path, prefixed_to);
+	res = grpc_afs_rename(from, to);
+	if (res == -1)
+		return -errno;
+	return 0;
+}
+
+static int afs_chmod(const char *path, mode_t mode) 
+{
+	int res;
+		char prefixed_path[1024];
+		strcpy(prefixed_path, "/tmp/cache");
+		strcat(prefixed_path, path);
+
+	res = chmod(prefixed_path, mode);
+	if (res == -1)
+		return -errno;
+	return 0;
+}
+
+static int afs_chown(const char *path, uid_t uid, gid_t gid) 
+{
+	int res;
+		char prefixed_path[1024];
+		strcpy(prefixed_path, "/tmp/cache");
+		strcat(prefixed_path, path);
+
+	res = lchown(prefixed_path, uid, gid);
+	if (res == -1)
+		return -errno;
+	return 0;
+}
+
+static int afs_truncate(const char *path, off_t size) 
+{
+	int res;
+		char prefixed_path[1024];
+		strcpy(prefixed_path, "/tmp/cache");
+		strcat(prefixed_path, path);
+
+	res = truncate(prefixed_path, size);
+	if (res == -1)
+		return -errno;
+	return 0;
 }
 
 // FUSE operations table
@@ -169,12 +278,18 @@ static struct fuse_operations afs_oper = {
 	.flush = afs_flush,
 	.mkdir = afs_mkdir,
 	.rmdir = afs_rmdir,
+	.mknod= afs_mknod,
+	.unlink= afs_unlink,
+	.rename= afs_rename,
+	.chmod= afs_chmod,
+	.chown= afs_chown,
+	.truncate = afs_truncate,
 };
 
 int main(int argc, char *argv[]) {
 
 	if(argc < 3){
-		printf("Usage: ./executable <cache-path> <mount-point> <optional-parameters>");
+		printf("Usage: ./executable <cache-path> <mount-point> <optional-parameters>\n");
 		return 0;
 	}
 
@@ -191,5 +306,6 @@ int main(int argc, char *argv[]) {
 		fuse_parameters[i-1] = argv[i];
 	}
 
+	printf("\nCache path is: %s\n", cache_path);
 	return fuse_main(argc-1, fuse_parameters, &afs_oper, NULL);
 }

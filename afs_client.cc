@@ -56,218 +56,256 @@ using afs::Dirent;
 using afs::DirentReply;
 using afs::Stat;
 using afs::FlushRequest;
+using afs::RenameRequest;
 using afs::FlushReply;
 using afs::AFS;
 
 class AFSClient {
- public:
-  std::string cache_path = "/tmp/cache";
-  AFSClient(std::shared_ptr<Channel> channel)
-      : stub_(AFS::NewStub(channel)) {}
+	public:
+		std::string cache_path = "/tmp/cache";
+		AFSClient(std::shared_ptr<Channel> channel)
+			: stub_(AFS::NewStub(channel)) {}
 
-  // Assambles the client's payload, sends it and presents the response back
-  // from the server.
-  std::string afs_open(const std::string& path) {
-    // Data we are sending to the server.
-    Request request;
-    request.set_name(path);
+		// Assambles the client's payload, sends it and presents the response back
+		// from the server.
+		std::string afs_open(const std::string& path) {
+			// Data we are sending to the server.
+			Request request;
+			request.set_name(path);
 
-    // Container for the data we expect from the server.
-    Reply reply;
+			// Container for the data we expect from the server.
+			Reply reply;
 
-    // Context for the client. It could be used to convey extra information to
-    // the server and/or tweak certain RPC behaviors.
-    ClientContext context;
+			// Context for the client. It could be used to convey extra information to
+			// the server and/or tweak certain RPC behaviors.
+			ClientContext context;
 
-    //Local AFS cache file handling
-    std::ofstream file_stream;
-		// TODO handle directory structure if it doesnt exist inside the cache
-    file_stream.open(cache_path + path);
+			//Local AFS cache file handling
+			std::ofstream file_stream;
+			// TODO handle directory structure if it doesnt exist inside the cache
+			file_stream.open(cache_path + path);
 
-    // The actual RPC.
-    std::cout << "The actual GRPC for " << cache_path + path << std::endl;
-    // Status status = stub_->afs_open(&context, request, &reply);
-    std::unique_ptr<ClientReader<Reply>> reader(stub_->afs_open(&context, request));
-    while (reader->Read(&reply)) {
-      //save the file locally
-      file_stream << reply.data();
-			std::cout << reply.data() << std::endl;
-    }
+			// The actual RPC.
+			std::cout << "The actual GRPC for " << cache_path + path << std::endl;
+			// Status status = stub_->afs_open(&context, request, &reply);
+			std::unique_ptr<ClientReader<Reply>> reader(stub_->afs_open(&context, request));
+			while (reader->Read(&reply)) {
+				//save the file locally
+				file_stream << reply.data();
+				std::cout << reply.data() << std::endl;
+			}
 
-    Status status = reader->Finish();
-    file_stream.close();
+			Status status = reader->Finish();
+			file_stream.close();
 
-    // Act upon its status.
-    if (status.ok()) {
-      return reply.data();
-    } else {
-      return "RPC failed";
-    }
-  }
-
-	//Think about the return value here
-	struct afs_dirent* afs_readdir(const std::string& path) {
-	
-		Request request;
-		request.set_name(path);
-		DirentReply dirent_reply;
-		ClientContext context;
-		struct afs_dirent *dirent_arr;
-
-		Status status = stub_->afs_readdir(&context, request, &dirent_reply);
-		int dirent_count = dirent_reply.count();
-		dirent_arr = (struct afs_dirent*)malloc(dirent_count*sizeof(struct afs_dirent));
-		for (int i = 0; i < dirent_count; i++) {
-			strcpy(dirent_arr[i].name, dirent_reply.mutable_dirent(i)->name().c_str()); 
-			dirent_arr[i].reclen = dirent_reply.mutable_dirent(i)->reclen();
-			dirent_arr[i].d_type = dirent_reply.mutable_dirent(i)->d_type();
+			// Act upon its status.
+			if (status.ok()) {
+				return reply.data();
+			} else {
+				return "RPC failed";
+			}
 		}
-		return dirent_arr;
-	}
 
-  int afs_getattr(const std::string& path, struct stat **st, const std::string& cache_path) {
-	
-		Request request;
-		request.set_name(path);
-		Stat s;
-		ClientContext context;
+		//Think about the return value here
+		struct afs_dirent* afs_readdir(const std::string& path) {
 
-		std::cout<<"\nDoing grpc call to getattr for path:"<<path;
-		//return lstat(path.c_str(),*st);
-		Status status = stub_->afs_getattr(&context, request, &s);
+			Request request;
+			request.set_name(path);
+			DirentReply dirent_reply;
+			ClientContext context;
+			struct afs_dirent *dirent_arr;
 
-		(*st)->st_dev = s.dev();
-		(*st)->st_ino = s.ino();
-		(*st)->st_mode = s.mode();
-		(*st)->st_nlink = s.nlink();
-		(*st)->st_uid = s.uid();
-		(*st)->st_gid = s.gid();
-		(*st)->st_rdev = s.rdev();
-		(*st)->st_size = s.size();
-		(*st)->st_atime = s.a_time();
-		(*st)->st_mtime = s.m_time();
-		(*st)->st_ctime = s.c_time();
-		(*st)->st_blksize = s.block_size();
-		(*st)->st_blocks = s.blocks();
-
-		if(status.error_code() == 1){ //StatusCode.CANCELLED
-		  std::cout<<"\nReturning -1 in getattr for path:"<<path;
-		  return -1;
+			Status status = stub_->afs_readdir(&context, request, &dirent_reply);
+			int dirent_count = dirent_reply.count();
+			dirent_arr = (struct afs_dirent*)malloc(dirent_count*sizeof(struct afs_dirent));
+			for (int i = 0; i < dirent_count; i++) {
+				strcpy(dirent_arr[i].name, dirent_reply.mutable_dirent(i)->name().c_str()); 
+				dirent_arr[i].reclen = dirent_reply.mutable_dirent(i)->reclen();
+				dirent_arr[i].d_type = dirent_reply.mutable_dirent(i)->d_type();
+			}
+			return dirent_arr;
 		}
-		
-		std::cout<<"\nReturning 0 in getattr for path:"<<path;
-		return 0;
 
-	}
+		int afs_getattr(const std::string& path, struct stat **st, const std::string& cache_path) {
 
-	int afs_flush(const std::string& path) {
-		
-		FlushRequest request;
-		FlushReply response;
-		ClientContext context;
-		request.set_path(path);
-		std::unique_ptr<ClientWriter<FlushRequest> > writer(
-											stub_->afs_flush(&context, &response));
-		
-		// send path
-		writer->Write(request);
+			Request request;
+			request.set_name(path);
+			Stat s;
+			ClientContext context;
 
-		std::ifstream file_stream;
-		file_stream.open(cache_path + path);
-		std::cout<<"\nTrying to open:"<<path;
-		char *buffer = new char[BUF_LEN];
+			std::cout<<"\nDoing grpc call to getattr for path:"<<path;
+			//return lstat(path.c_str(),*st);
+			Status status = stub_->afs_getattr(&context, request, &s);
 
-		while (!file_stream.eof()) {
-			
-			file_stream.read(buffer, BUF_LEN);
-			std::string file_data = buffer;
-			std::cout<<"\nWriting data: "<<file_data<<std::endl;
-			std::cout<<"\nlength: "<<file_data.length()<<std::endl;
-			request.set_data(file_data);
-			
-			std::cout<<"\nBefore sending to the server";
-			writer->Write(request);			
-			std::cout<<"After wrinting to the server";
+			(*st)->st_dev = s.dev();
+			(*st)->st_ino = s.ino();
+			(*st)->st_mode = s.mode();
+			(*st)->st_nlink = s.nlink();
+			(*st)->st_uid = s.uid();
+			(*st)->st_gid = s.gid();
+			(*st)->st_rdev = s.rdev();
+			(*st)->st_size = s.size();
+			(*st)->st_atime = s.a_time();
+			(*st)->st_mtime = s.m_time();
+			(*st)->st_ctime = s.c_time();
+			(*st)->st_blksize = s.block_size();
+			(*st)->st_blocks = s.blocks();
 
-			if((int)file_data.length() < 1024)
-			  break;
+			if(status.error_code() == 1){ //StatusCode.CANCELLED
+				std::cout<<"\nReturning -1 in getattr for path:"<<path;
+				return -1;
+			}
+
+			std::cout<<"\nReturning 0 in getattr for path:"<<path;
+			return 0;
+
 		}
-		std::cout<<"\nTrying to close the file stream";
-		file_stream.close();
-		std::cout<<"\nOut of the while loop";
-		writer->WritesDone();
-		Status status = writer->Finish();
-		delete[] buffer;
 
-		return 0;
-	}
+		int afs_flush(const std::string& path) {
 
-        int afs_mkdir(const std::string& path) {
-	        Request request;
-		StatusReply reply;
+			FlushRequest request;
+			FlushReply response;
+			ClientContext context;
+			request.set_path(path);
+			std::unique_ptr<ClientWriter<FlushRequest> > writer(
+					stub_->afs_flush(&context, &response));
 
-		request.set_name(path);
-		ClientContext context;
+			// send path
+			writer->Write(request);
 
-		Status status = stub_->afs_mkdir(&context, request, &reply);
-		return reply.status();
-	}
+			std::ifstream file_stream;
+			file_stream.open(cache_path + path);
+			std::cout<<"\nTrying to open:"<<path;
+			char *buffer = new char[BUF_LEN];
 
-        int afs_rmdir(const std::string& path) {
-	        Request request;
-		StatusReply reply;
+			while (!file_stream.eof()) {
 
-		request.set_name(path);
-		ClientContext context;
+				file_stream.read(buffer, BUF_LEN);
+				std::string file_data = buffer;
+				std::cout<<"\nWriting data: "<<file_data<<std::endl;
+				std::cout<<"\nlength: "<<file_data.length()<<std::endl;
+				request.set_data(file_data);
 
-		Status status = stub_->afs_rmdir(&context, request, &reply);
-		return reply.status();
-	}
+				std::cout<<"\nBefore sending to the server";
+				writer->Write(request);			
+				std::cout<<"After wrinting to the server";
 
- private:
-  std::unique_ptr<AFS::Stub> stub_;
+				if((int)file_data.length() < 1024)
+					break;
+			}
+			std::cout<<"\nTrying to close the file stream";
+			file_stream.close();
+			std::cout<<"\nOut of the while loop";
+			writer->WritesDone();
+			Status status = writer->Finish();
+			delete[] buffer;
+
+			return 0;
+		}
+
+		int afs_mkdir(const std::string& path) {
+			Request request;
+			StatusReply reply;
+
+			request.set_name(path);
+			ClientContext context;
+
+			Status status = stub_->afs_mkdir(&context, request, &reply);
+			return reply.status();
+		}
+
+		int afs_rmdir(const std::string& path) {
+			Request request;
+			StatusReply reply;
+
+			request.set_name(path);
+			ClientContext context;
+
+			Status status = stub_->afs_rmdir(&context, request, &reply);
+			return reply.status();
+		}
+
+		int afs_unlink(const std::string& path) {
+			Request request;
+			StatusReply reply;
+
+			request.set_name(path);
+			ClientContext context;
+
+			Status status = stub_->afs_unlink(&context, request, &reply);
+			return reply.status();
+		}
+
+		int afs_rename(const std::string& from, const std::string& to) {
+			RenameRequest request;
+			StatusReply reply;
+
+			request.set_old_name(from);
+			request.set_new_name(to);
+			ClientContext context;
+
+			Status status = stub_->afs_rename(&context, request, &reply);
+			return reply.status();
+		}
+
+	private:
+		std::unique_ptr<AFS::Stub> stub_;
 };
 
 
 extern "C" int grpc_afs_open(const char *path) {
 	std::cout << "In exported open implementation " << std::endl;
-  AFSClient client(
-      grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
-  std::string r = client.afs_open(path);
-  std::cout << r << std::endl;
-  return 0;
+	AFSClient client(
+			grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+	std::string r = client.afs_open(path);
+	std::cout << r << std::endl;
+	return 0;
 }
 
 extern "C" struct afs_dirent* grpc_afs_readdir(const char *path) {
-  AFSClient client(
-      grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
-  struct afs_dirent *r = client.afs_readdir(path);
+	AFSClient client(
+			grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+	struct afs_dirent *r = client.afs_readdir(path);
 	return r;
 }
 
 extern "C" int grpc_afs_getattr(const char *path, struct stat **s, const char *cache_path) {
-  AFSClient client(
-      grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
-  return client.afs_getattr(path, s, cache_path);
+	AFSClient client(
+			grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+	return client.afs_getattr(path, s, cache_path);
 }
 
 extern "C" int grpc_afs_flush(const char *path) {
-  AFSClient client(
-      grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
-  int s = client.afs_flush(path);
+	AFSClient client(
+			grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+	int s = client.afs_flush(path);
 	return s;
 }
 
 extern "C" int grpc_afs_mkdir(const char *path) {
-  AFSClient client(
-      grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
-  int s = client.afs_mkdir(path);
+	AFSClient client(
+			grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+	int s = client.afs_mkdir(path);
 	return s;
 }
 
 extern "C" int grpc_afs_rmdir(const char *path) {
-  AFSClient client(
-      grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
-  int s = client.afs_rmdir(path);
+	AFSClient client(
+			grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+	int s = client.afs_rmdir(path);
+	return s;
+}
+
+extern "C" int grpc_afs_unlink(const char *path) {
+	AFSClient client(
+			grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+	int s = client.afs_unlink(path);
+	return s;
+}
+
+extern "C" int grpc_afs_rename(const char *from, const char *to) {
+	AFSClient client(
+			grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+	int s = client.afs_rename(from, to);
 	return s;
 }

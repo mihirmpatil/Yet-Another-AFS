@@ -40,6 +40,7 @@ class Dirent;
 class DirentReply;
 class FlushReply;
 class FlushRequest;
+class RenameRequest;
 class Reply;
 class Request;
 class Stat;
@@ -812,6 +813,101 @@ class StatusReply : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static StatusReply* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class RenameRequest : public ::google::protobuf::Message {
+ public:
+  RenameRequest();
+  virtual ~RenameRequest();
+
+  RenameRequest(const RenameRequest& from);
+
+  inline RenameRequest& operator=(const RenameRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const RenameRequest& default_instance();
+
+  void Swap(RenameRequest* other);
+
+  // implements Message ----------------------------------------------
+
+  inline RenameRequest* New() const { return New(NULL); }
+
+  RenameRequest* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const RenameRequest& from);
+  void MergeFrom(const RenameRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(RenameRequest* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional string old_name = 1;
+  void clear_old_name();
+  static const int kOldNameFieldNumber = 1;
+  const ::std::string& old_name() const;
+  void set_old_name(const ::std::string& value);
+  void set_old_name(const char* value);
+  void set_old_name(const char* value, size_t size);
+  ::std::string* mutable_old_name();
+  ::std::string* release_old_name();
+  void set_allocated_old_name(::std::string* old_name);
+
+  // optional string new_name = 2;
+  void clear_new_name();
+  static const int kNewNameFieldNumber = 2;
+  const ::std::string& new_name() const;
+  void set_new_name(const ::std::string& value);
+  void set_new_name(const char* value);
+  void set_new_name(const char* value, size_t size);
+  ::std::string* mutable_new_name();
+  ::std::string* release_new_name();
+  void set_allocated_new_name(::std::string* new_name);
+
+  // @@protoc_insertion_point(class_scope:afs.RenameRequest)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::internal::ArenaStringPtr old_name_;
+  ::google::protobuf::internal::ArenaStringPtr new_name_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_afs_2eproto();
+  friend void protobuf_AssignDesc_afs_2eproto();
+  friend void protobuf_ShutdownFile_afs_2eproto();
+
+  void InitAsDefaultInstance();
+  static RenameRequest* default_instance_;
+};
 // ===================================================================
 
 
@@ -1345,7 +1441,99 @@ inline void StatusReply::set_status(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:afs.StatusReply.status)
 }
 
+// -------------------------------------------------------------------
+
+// RenameRequest
+
+// optional string old_name = 1;
+inline void RenameRequest::clear_old_name() {
+  old_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RenameRequest::old_name() const {
+  // @@protoc_insertion_point(field_get:afs.RenameRequest.old_name)
+  return old_name_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RenameRequest::set_old_name(const ::std::string& value) {
+  
+  old_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:afs.RenameRequest.old_name)
+}
+inline void RenameRequest::set_old_name(const char* value) {
+  
+  old_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:afs.RenameRequest.old_name)
+}
+inline void RenameRequest::set_old_name(const char* value, size_t size) {
+  
+  old_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:afs.RenameRequest.old_name)
+}
+inline ::std::string* RenameRequest::mutable_old_name() {
+  
+  // @@protoc_insertion_point(field_mutable:afs.RenameRequest.old_name)
+  return old_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RenameRequest::release_old_name() {
+  
+  return old_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RenameRequest::set_allocated_old_name(::std::string* old_name) {
+  if (old_name != NULL) {
+    
+  } else {
+    
+  }
+  old_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), old_name);
+  // @@protoc_insertion_point(field_set_allocated:afs.RenameRequest.old_name)
+}
+
+// optional string new_name = 2;
+inline void RenameRequest::clear_new_name() {
+  new_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RenameRequest::new_name() const {
+  // @@protoc_insertion_point(field_get:afs.RenameRequest.new_name)
+  return new_name_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RenameRequest::set_new_name(const ::std::string& value) {
+  
+  new_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:afs.RenameRequest.new_name)
+}
+inline void RenameRequest::set_new_name(const char* value) {
+  
+  new_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:afs.RenameRequest.new_name)
+}
+inline void RenameRequest::set_new_name(const char* value, size_t size) {
+  
+  new_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:afs.RenameRequest.new_name)
+}
+inline ::std::string* RenameRequest::mutable_new_name() {
+  
+  // @@protoc_insertion_point(field_mutable:afs.RenameRequest.new_name)
+  return new_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RenameRequest::release_new_name() {
+  
+  return new_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RenameRequest::set_allocated_new_name(::std::string* new_name) {
+  if (new_name != NULL) {
+    
+  } else {
+    
+  }
+  new_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), new_name);
+  // @@protoc_insertion_point(field_set_allocated:afs.RenameRequest.new_name)
+}
+
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
