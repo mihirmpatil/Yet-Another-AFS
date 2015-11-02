@@ -6,7 +6,7 @@ extern "C"
 */
 
 extern int grpc_afs_open(const char *path);
-extern struct afs_dirent* grpc_afs_readdir(const char *path);
+extern struct afs_dirent_array grpc_afs_readdir(const char *path);
 extern int grpc_afs_getattr(const char *path, struct stat **s, const char *cache_path);
 extern int grpc_afs_flush(const char *path);
 extern int grpc_afs_mkdir(const char *path);

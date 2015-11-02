@@ -25,20 +25,19 @@ static int afs_getattr(const char *path, struct stat *stbuf)
 
 	strcpy(prefixed_path, cache_path);
 	strcat(prefixed_path, path);
-
+/*
 	struct stat *remote_stat = (struct stat *)malloc(sizeof(struct stat));
-	int remote_return = grpc_afs_getattr(path, &remote_stat, cache_path);
-	int local_return = lstat(prefixed_path, stbuf);
+	int remote_return = grpc_afs_getattr(path, &stbuf, cache_path);
+	int local_return = 0;//lstat(prefixed_path, stbuf);
 	if (remote_return == -1 && local_return == -1)
 		return -errno;
-/*
-	if(lstat(prefixed_path, stbuf) == -1){
-		if(grpc_afs_getattr(path, &stbuf, cache_path) == -1){
-			lstat(prefixed_path, stbuf);
+*/
+	if(grpc_afs_getattr(path, &stbuf, cache_path) == -1) {
+		if(lstat(prefixed_path, stbuf) == -1){
+			//lstat(prefixed_path, stbuf);
 			return -errno;
 		}
 	}
-*/
 	return 0;
 }
 
@@ -50,7 +49,14 @@ static int afs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 	(void) offset;
 	(void) fi;
 
-	dp = opendir(path);
+	char prefixed_path[1024];
+
+	strcpy(prefixed_path, cache_path);
+	strcat(prefixed_path, path);
+
+	printf("\nReaddir for path: %s\n",path);
+
+/*	dp = opendir(prefixed_path);
 	if (dp != NULL) {
 
 		while ((de = readdir(dp)) != NULL) {
@@ -62,21 +68,23 @@ static int afs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 				break;
 		}
 	}
-	else {
-		struct afs_dirent *dirent_arr = grpc_afs_readdir(path);
-		int count = sizeof(dirent_arr)/sizeof(struct afs_dirent);
+	else {*/
+		struct afs_dirent_array dirent_array = grpc_afs_readdir(path);
+		int count = dirent_array.count;
 		int i;
+		printf("\nCount = %d",count);
 		for (i = 0; i < count; i++) {
 			struct stat st;
 			memset(&st, 0, sizeof(st));
-			st.st_ino = de->d_ino;
-			st.st_mode = de->d_type << 12;
-			if (filler(buf, de->d_name, &st, 0))
+			printf("\nName: %s, mode %d, ino:%d",dirent_array.dirent_arr[i].name, dirent_array.dirent_arr[i].d_type,dirent_array.dirent_arr[i].reclen);
+			st.st_ino = dirent_array.dirent_arr[i].reclen;
+			st.st_mode = dirent_array.dirent_arr[i].d_type << 12;
+			if (filler(buf, dirent_array.dirent_arr[i].name, &st, 0))
 				break;
 		}
-	}
+	//}
 
-	closedir(dp);
+	//closedir(dp);
 	return 0;
 }
 
@@ -84,11 +92,10 @@ static int afs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 static int afs_open(const char *path, struct fuse_file_info *fi)
 {
 	// check if local file exists
-	// check if the local file is the updated version as the server
+	// check if the local file is the updated version as the server - use grpc_afs_getattr
 	// if not exists or not updated make grpc call
 	printf("In afs_open inside fuse client for %s\n",path);
 	grpc_afs_open(path);
-	// save file locally - handle this in grpc client itself to avoid passing data here
 	return SUCCESS;
 }
 
@@ -141,7 +148,7 @@ static int afs_write(const char *path, const char *buf, size_t size,
 static int afs_flush(const char *path, struct fuse_file_info *fi)
 {
 	int res = 0;
-	// upload file to server always 
+	// upload file to server always (maybe check for O_RDONLY) 
 
 	/*char prefixed_path[1024];
 		strcpy(prefixed_path, "/tmp/cache");
@@ -174,7 +181,7 @@ static int afs_mkdir(const char *path, mode_t mode)
 	strcpy(prefixed_path, "/tmp/cache");
 	strcat(prefixed_path, path);
 
-	res = mkdir(prefixed_path, S_IRWXO);
+	res = mkdir(prefixed_path, mode);
 	res = grpc_afs_mkdir(path);
 	return res;
 }

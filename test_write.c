@@ -3,7 +3,7 @@
 
 int main()
 {
-	int fd = open("/tmp/afs/random2", O_RDWR | O_CREAT);
+	int fd = open("/tmp/afs/test_file", O_RDWR | O_CREAT);
 	if (fd == -1)
 		printf("open call failed\n");
 	char buf[5];

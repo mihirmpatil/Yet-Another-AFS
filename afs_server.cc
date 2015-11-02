@@ -95,13 +95,16 @@ class AFSServiceImpl final : public AFS::Service {
 			DirentReply* response) override {
 
 		std::string path = afs_root + request->name();
+		std::cout << "Server readdir() path: " << path << std::endl;
 		DIR *dp;
 		struct dirent *de;
 		//(void) offset;
 		//(void) fi;
+
 		dp = opendir(path.c_str());
 		//if (dp == NULL)
 		//	return -errno;
+
 		int count = 0;
 		while ((de = readdir(dp)) != NULL) {
 			struct stat st;
@@ -111,8 +114,11 @@ class AFSServiceImpl final : public AFS::Service {
 
 			Dirent *dirent = response->add_dirent();
 			dirent->set_name(de->d_name);
-			dirent->set_reclen(de->d_reclen);
+			dirent->set_reclen(de->d_ino); // Changed from de->d_reclen
 			dirent->set_d_type(de->d_type);
+
+			//std::cout<<"\nSending: name:"<<dirent->name()<<", ino:"<<dirent->reclen()<<", type:"<<dirent->d_type()<<std::endl;
+
 			count++;
 
 		}
@@ -201,7 +207,7 @@ class AFSServiceImpl final : public AFS::Service {
 	Status afs_mkdir(ServerContext *context, const Request* request, StatusReply* response){
 
 		std::cout<<"\nRequested to make path: "<<request->name();
-		int ret = mkdir((afs_root+request->name()).c_str(),S_IRWXO);
+		int ret = mkdir((afs_root+request->name()).c_str(),S_IRWXO | S_IRWXU);
 		response->set_status(ret);
 		return Status::OK;
 
@@ -252,7 +258,7 @@ int main(int argc, char* argv[]) {
 
 	if(afs_root[afs_root.length()-1] == '/'){
 		afs_root = afs_root.substr(0,afs_root.length()-1);
-		//afs_root = "";
+		afs_root = "";
 	}
 
 	RunServer();
