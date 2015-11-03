@@ -41,6 +41,9 @@
 
 #include "afs.grpc.pb.h"
 #include "afs_fuse_structs.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
 
 #define BUF_LEN 1024
 using grpc::Channel;
@@ -70,6 +73,7 @@ public:
 		
 		Request request;
 		Reply reply;
+		int count = 0, buffersize = 0;
 
 		// Data we are sending to the server.
 		request.set_name(path);		
@@ -79,7 +83,7 @@ public:
 
 		//Local AFS cache file handling
 		std::ofstream file_stream;
-		file_stream.open(cache_path + path + ".tmp");
+		file_stream.open(cache_path + path);
 
 		// The actual RPC.
 		std::cout << "The actual GRPC for " << cache_path + path << std::endl;
@@ -87,9 +91,16 @@ public:
 		std::unique_ptr<ClientReader<Reply>> reader(stub_->afs_open(&context, request));
 		while (reader->Read(&reply)) {
 			//save the file locally
-			file_stream << reply.data();
-			std::cout << reply.data() << std::endl;
+			//file_stream << reply.data();
+			buffersize = reply.size();
+			file_stream << reply.data().substr(0,buffersize); //, BUF_LEN);
+
+			count += reply.size();
+			std::cout << "in afs_open on client side \n" << reply.data() << std::endl;
+			std::cout << "length of current data : " << buffersize << std::endl;
 		}
+
+		std::cout<<"\nTotal len = "<<count<<std::endl;
 
 		Status status = reader->Finish();
 		file_stream.close();
@@ -171,6 +182,7 @@ public:
 		FlushRequest request;
 		FlushReply response;
 		ClientContext context;
+		int count = 0, currBufferLen;
 		request.set_path(path);
 		std::unique_ptr<ClientWriter<FlushRequest> > writer(
 															stub_->afs_flush(&context, &response));
@@ -180,24 +192,45 @@ public:
 
 		std::ifstream file_stream;
 		file_stream.open(cache_path + path);
-		std::cout<<"\nTrying to open:"<<path;
-			
-		while (!file_stream.eof()) {
-			  
-			char *buffer = new char[BUF_LEN];
-			file_stream.read(buffer, BUF_LEN);
-			std::string file_data = buffer;
-			std::cout<<"\nWriting data: "<<file_data<<std::endl;
+		//int fd = open((cache_path + path).c_str(), O_RDONLY);
+		//if (fd == -1)
+		//	printf("\nopen file in flush failed for %s\n", (cache_path + path).c_str());
+
+		std::cout<<"\nTrying to open:"<<cache_path + path;
+
+		file_stream.seekg(0, file_stream.end);
+		int filesize = file_stream.tellg();
+        file_stream.seekg(0, file_stream.beg);
+
+		std::cout<<"\nFile size = "<<filesize<<std::endl;
+
+		while (count < filesize) {
+			char *buffer;  
+			if(count + BUF_LEN <= filesize){
+				currBufferLen = BUF_LEN;
+			}
+			else{
+				currBufferLen = filesize-count;
+			}
+
+			std::cout<<"\nCurrbuffer = "<<currBufferLen<<std::endl;
+
+			buffer = new char[currBufferLen + 1];
+			file_stream.read(buffer, currBufferLen);
+			//char *buf2 = new char[currBufferLen + 1];
+			//read(fd, buf2, currBufferLen);
+			//std::cout << "C style read buffer - " << buf2 << std::endl;
+			count += currBufferLen;
+
+			std::string file_data = std::string(buffer);
+			std::cout<<"\nWriting data: "<<buffer<<std::endl;
 			std::cout<<"\nlength: "<<file_data.length()<<std::endl;
 			request.set_data(file_data);
-
-			std::cout<<"\nBefore sending to the server";
+			request.set_size(currBufferLen);
 			writer->Write(request);			
-			std::cout<<"After wrinting to the server";
+			std::cout<<"Data written to server";
 			delete[] buffer;
 
-			if((int)file_data.length() < 1024)
-				break;
 		}
 		std::cout<<"\nTrying to close the file stream";
 		file_stream.close();

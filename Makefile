@@ -43,7 +43,7 @@ PROTOS_PATH = .
 vpath %.proto $(PROTOS_PATH)
 
 #all: system-check greeter_client greeter_server greeter_async_client greeter_async_server
-all:	system-check afs_server afs_fuse_client
+all:	system-check afs_server afs_fuse_client bench
 
 afs_server:	afs.pb.o afs.grpc.pb.o afs_server.o
 	$(CXX) $^ $(LDFLAGS) -o $@
@@ -53,6 +53,10 @@ afs_fuse_client:	afs.pb.o afs.grpc.pb.o afs_client.o
 	g++ afs_fuse_client.o afs_client.o afs.grpc.pb.o afs.pb.o -L/usr/local/lib -lgrpc++_unsecure -lgrpc -lgpr -lprotobuf -lpthread -ldl -lfuse -D_FILE_OFFSET_BITS=64 -o afs_fuse_client
 #$(CXX) $^ $(LDFLAGS) $(FUSEFLAGS) -o $@
 
+bench: 
+	gcc read_bench.c -o read_bench 
+	gcc write_bench.c -o write_bench 
+	
 afs_fuse_obj:	
 	gcc -c afs_fuse_client.c $(FUSEFLAGS)
 
@@ -67,7 +71,7 @@ tester: test_open.c
 	gcc test_open.c -o test_open	
 
 clean:
-	rm -f *.o afs_server afs_fuse_client 
+	rm -f *.o afs_server afs_fuse_client read_bench write_bench
 
 
 # The following is to test your system and ensure a smoother experience.

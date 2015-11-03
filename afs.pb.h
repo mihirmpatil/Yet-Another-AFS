@@ -198,12 +198,19 @@ class Reply : public ::google::protobuf::Message {
   ::std::string* release_data();
   void set_allocated_data(::std::string* data);
 
+  // optional int32 size = 2;
+  void clear_size();
+  static const int kSizeFieldNumber = 2;
+  ::google::protobuf::int32 size() const;
+  void set_size(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:afs.Reply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   bool _is_default_instance_;
   ::google::protobuf::internal::ArenaStringPtr data_;
+  ::google::protobuf::int32 size_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_afs_2eproto();
   friend void protobuf_AssignDesc_afs_2eproto();
@@ -642,6 +649,12 @@ class FlushRequest : public ::google::protobuf::Message {
   ::std::string* release_data();
   void set_allocated_data(::std::string* data);
 
+  // optional int32 size = 3;
+  void clear_size();
+  static const int kSizeFieldNumber = 3;
+  ::google::protobuf::int32 size() const;
+  void set_size(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:afs.FlushRequest)
  private:
 
@@ -649,6 +662,7 @@ class FlushRequest : public ::google::protobuf::Message {
   bool _is_default_instance_;
   ::google::protobuf::internal::ArenaStringPtr path_;
   ::google::protobuf::internal::ArenaStringPtr data_;
+  ::google::protobuf::int32 size_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_afs_2eproto();
   friend void protobuf_AssignDesc_afs_2eproto();
@@ -1004,6 +1018,20 @@ inline void Reply::set_allocated_data(::std::string* data) {
   }
   data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
   // @@protoc_insertion_point(field_set_allocated:afs.Reply.data)
+}
+
+// optional int32 size = 2;
+inline void Reply::clear_size() {
+  size_ = 0;
+}
+inline ::google::protobuf::int32 Reply::size() const {
+  // @@protoc_insertion_point(field_get:afs.Reply.size)
+  return size_;
+}
+inline void Reply::set_size(::google::protobuf::int32 value) {
+  
+  size_ = value;
+  // @@protoc_insertion_point(field_set:afs.Reply.size)
 }
 
 // -------------------------------------------------------------------
@@ -1403,6 +1431,20 @@ inline void FlushRequest::set_allocated_data(::std::string* data) {
   }
   data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
   // @@protoc_insertion_point(field_set_allocated:afs.FlushRequest.data)
+}
+
+// optional int32 size = 3;
+inline void FlushRequest::clear_size() {
+  size_ = 0;
+}
+inline ::google::protobuf::int32 FlushRequest::size() const {
+  // @@protoc_insertion_point(field_get:afs.FlushRequest.size)
+  return size_;
+}
+inline void FlushRequest::set_size(::google::protobuf::int32 value) {
+  
+  size_ = value;
+  // @@protoc_insertion_point(field_set:afs.FlushRequest.size)
 }
 
 // -------------------------------------------------------------------

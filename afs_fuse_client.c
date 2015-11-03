@@ -251,18 +251,19 @@ static int afs_read(const char *path, char *buf, size_t size, off_t offset,
 	int res;
 	(void) fi;
 	char prefixed_path[1024];
-	char temp_path[1024];
+	//char temp_path[1024];
 	strcpy(prefixed_path, cache_path);
 	strcat(prefixed_path, path);
-	strcpy(temp_path, prefixed_path);
-	strcat(temp_path, ".tmp");
+	//strcpy(temp_path, prefixed_path);
+	//strcat(temp_path, ".tmp");
 	
 	// service read from temp file if it exists
-	int tmp_fd = open(temp_path, O_RDONLY);
+	/*int tmp_fd = open(temp_path, O_RDONLY);
 	if (tmp_fd != -1)
 		fd = tmp_fd;
 	else
-		fd = open(prefixed_path, O_RDONLY);
+	*/
+	fd = open(prefixed_path, O_RDONLY);
 
 	if (fd == -1)
 		return -errno;
@@ -287,10 +288,25 @@ static int afs_write(const char *path, const char *buf, size_t size,
 	strcpy(prefixed_path, cache_path);
 	strcat(prefixed_path, path);
 
+	char temp_path[1024];
+	strcpy(temp_path, prefixed_path);
+	strcat(temp_path, ".tmp");
+
 	printf("\nThe file opened for writing is: %s\n",prefixed_path);
 	printf("\nBuff: %s\nsize: %d\noffset: %d\n",buf,(int)size,(int)offset);
 
-	fd = open(prefixed_path, fi->flags, S_IRWXU);
+	fd = open(temp_path, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
+	// copy contents of the original file
+	int file_fd = open(prefixed_path, O_RDONLY);
+	if (file_fd != -1)
+	{	
+		int BUF_LEN = 1024;
+		char buffer[BUF_LEN];
+		int numRead;
+		while ((numRead = read(file_fd, buffer, BUF_LEN)) > 0)
+			write(fd, buffer, numRead);
+	}
+
 	if (fd == -1){
 		printf("\nUnable to open the file");
 		return -errno;
@@ -300,6 +316,7 @@ static int afs_write(const char *path, const char *buf, size_t size,
 		printf("\nUnable to write to the file");
 		res = -errno;
 	}
+	fsync(fd);
 	close(fd);
 	return res;
 }
@@ -319,8 +336,12 @@ static int afs_flush(const char *path, struct fuse_file_info *fi)
 	strcpy(temp_path, prefixed_path);
 	strcat(temp_path, ".tmp");
 
-	if (open(temp_path, O_RDONLY) == -1)
+	struct stat *stbuf = (struct stat*)malloc(sizeof(struct stat));
+	if (lstat(temp_path, stbuf) == -1)
+	{
+		printf("\nTemp file does not exist! returning -1\n");
 		return -1;
+	}
 
 	rename(temp_path, prefixed_path);
 

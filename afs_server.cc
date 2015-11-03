@@ -73,9 +73,9 @@ class AFSServiceImpl final : public AFS::Service {
 
 
 		Reply reply;
+		int count = 0;
 		std::cout << "in afs_open for " << request->name() << std::endl;
 		std::ifstream file_stream;
-		char *buffer = new char [BUF_LEN];
 
 		file_stream.open(afs_root + request->name());
 		
@@ -84,14 +84,41 @@ class AFSServiceImpl final : public AFS::Service {
 		int fd = open(lockfile.c_str(), O_WRONLY | O_CREAT);
 		flock(fd, LOCK_SH);
 
-		while (!file_stream.eof()) {
+		file_stream.seekg(0, file_stream.end);
+		int filesize = file_stream.tellg();
+		file_stream.seekg(0, file_stream.beg);
 
-			file_stream.read(buffer, BUF_LEN);
-			std::string data = buffer;
+		std::cout<<"\nFile size = "<<filesize<<std::endl;
+
+		while (count < filesize){
+			char *buffer;
+			int currBufferLen = 0;
+
+			if(count + BUF_LEN <= filesize){
+				//std::cout<<"\nIn if"<<std::endl;
+				currBufferLen = BUF_LEN;
+			}
+			else{
+				//std::cout<<"\nIn else: s= "<<(filesize-count)<<std::endl;
+				currBufferLen = filesize-count;
+			}
+
+			buffer = new char[currBufferLen+1];
+			file_stream.read(buffer, currBufferLen);
+			count += currBufferLen;
+
+			std::string data = std::string(buffer);
 			reply.set_data(data);
+			reply.set_size(currBufferLen);
+			//std::cout<<"\nData:\n"<<data;
+			//std::cout<<"\ncount = "<<count;
 			writer->Write(reply);
+			
+			delete[] buffer;
 		}
-
+		
+		std::cout<<"\nLength = "<<count<<std::endl;
+		
 		file_stream.close();
 		// unlock and cleanup
 		flock(fd, LOCK_UN);
@@ -191,7 +218,7 @@ class AFSServiceImpl final : public AFS::Service {
 
 
 		while (reader->Read(&request)) {
-			file_data = request.data();
+			file_data = request.data().substr(0,request.size());
 			std::cout<<"\nWriting data:"<<file_data;
 			file_stream << file_data;
 		}

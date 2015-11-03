@@ -73,8 +73,9 @@ void protobuf_AssignDesc_afs_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, _is_default_instance_));
   Reply_descriptor_ = file->message_type(1);
-  static const int Reply_offsets_[1] = {
+  static const int Reply_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Reply, data_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Reply, size_),
   };
   Reply_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
@@ -148,9 +149,10 @@ void protobuf_AssignDesc_afs_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DirentReply, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DirentReply, _is_default_instance_));
   FlushRequest_descriptor_ = file->message_type(5);
-  static const int FlushRequest_offsets_[2] = {
+  static const int FlushRequest_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FlushRequest, path_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FlushRequest, data_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FlushRequest, size_),
   };
   FlushRequest_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
@@ -272,29 +274,30 @@ void protobuf_AddDesc_afs_2eproto() {
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\tafs.proto\022\003afs\"\027\n\007Request\022\014\n\004name\030\001 \001("
-    "\t\"\025\n\005Reply\022\014\n\004data\030\001 \001(\014\"\307\001\n\004Stat\022\013\n\003dev"
-    "\030\001 \001(\005\022\013\n\003ino\030\002 \001(\005\022\014\n\004mode\030\003 \001(\005\022\r\n\005nli"
-    "nk\030\004 \001(\005\022\013\n\003uid\030\005 \001(\005\022\013\n\003gid\030\006 \001(\005\022\014\n\004rd"
-    "ev\030\007 \001(\005\022\014\n\004size\030\010 \001(\003\022\016\n\006a_time\030\t \001(\003\022\016"
-    "\n\006m_time\030\n \001(\003\022\016\n\006c_time\030\013 \001(\003\022\022\n\nblock_"
-    "size\030\014 \001(\005\022\016\n\006blocks\030\r \001(\005\"6\n\006Dirent\022\014\n\004"
-    "name\030\001 \001(\t\022\016\n\006reclen\030\002 \001(\005\022\016\n\006d_type\030\003 \001"
-    "(\005\"9\n\013DirentReply\022\r\n\005count\030\001 \001(\005\022\033\n\006dire"
-    "nt\030\002 \003(\0132\013.afs.Dirent\"*\n\014FlushRequest\022\014\n"
-    "\004path\030\001 \001(\t\022\014\n\004data\030\002 \001(\014\"\034\n\nFlushReply\022"
-    "\016\n\006status\030\001 \001(\005\"\035\n\013StatusReply\022\016\n\006status"
-    "\030\001 \001(\005\"3\n\rRenameRequest\022\020\n\010old_name\030\001 \001("
-    "\t\022\020\n\010new_name\030\002 \001(\t2\203\003\n\003AFS\022(\n\010afs_open\022"
-    "\014.afs.Request\032\n.afs.Reply\"\0000\001\022(\n\013afs_get"
-    "attr\022\014.afs.Request\032\t.afs.Stat\"\000\022/\n\013afs_r"
-    "eaddir\022\014.afs.Request\032\020.afs.DirentReply\"\000"
-    "\0223\n\tafs_flush\022\021.afs.FlushRequest\032\017.afs.F"
-    "lushReply\"\000(\001\022-\n\tafs_rmdir\022\014.afs.Request"
-    "\032\020.afs.StatusReply\"\000\022-\n\tafs_mkdir\022\014.afs."
-    "Request\032\020.afs.StatusReply\"\000\022.\n\nafs_unlin"
-    "k\022\014.afs.Request\032\020.afs.StatusReply\"\000\0224\n\na"
-    "fs_rename\022\022.afs.RenameRequest\032\020.afs.Stat"
-    "usReply\"\000B\017\n\007ex.grpc\242\002\003AFSb\006proto3", 954);
+    "\t\"#\n\005Reply\022\014\n\004data\030\001 \001(\014\022\014\n\004size\030\002 \001(\005\"\307"
+    "\001\n\004Stat\022\013\n\003dev\030\001 \001(\005\022\013\n\003ino\030\002 \001(\005\022\014\n\004mod"
+    "e\030\003 \001(\005\022\r\n\005nlink\030\004 \001(\005\022\013\n\003uid\030\005 \001(\005\022\013\n\003g"
+    "id\030\006 \001(\005\022\014\n\004rdev\030\007 \001(\005\022\014\n\004size\030\010 \001(\003\022\016\n\006"
+    "a_time\030\t \001(\003\022\016\n\006m_time\030\n \001(\003\022\016\n\006c_time\030\013"
+    " \001(\003\022\022\n\nblock_size\030\014 \001(\005\022\016\n\006blocks\030\r \001(\005"
+    "\"6\n\006Dirent\022\014\n\004name\030\001 \001(\t\022\016\n\006reclen\030\002 \001(\005"
+    "\022\016\n\006d_type\030\003 \001(\005\"9\n\013DirentReply\022\r\n\005count"
+    "\030\001 \001(\005\022\033\n\006dirent\030\002 \003(\0132\013.afs.Dirent\"8\n\014F"
+    "lushRequest\022\014\n\004path\030\001 \001(\t\022\014\n\004data\030\002 \001(\014\022"
+    "\014\n\004size\030\003 \001(\005\"\034\n\nFlushReply\022\016\n\006status\030\001 "
+    "\001(\005\"\035\n\013StatusReply\022\016\n\006status\030\001 \001(\005\"3\n\rRe"
+    "nameRequest\022\020\n\010old_name\030\001 \001(\t\022\020\n\010new_nam"
+    "e\030\002 \001(\t2\203\003\n\003AFS\022(\n\010afs_open\022\014.afs.Reques"
+    "t\032\n.afs.Reply\"\0000\001\022(\n\013afs_getattr\022\014.afs.R"
+    "equest\032\t.afs.Stat\"\000\022/\n\013afs_readdir\022\014.afs"
+    ".Request\032\020.afs.DirentReply\"\000\0223\n\tafs_flus"
+    "h\022\021.afs.FlushRequest\032\017.afs.FlushReply\"\000("
+    "\001\022-\n\tafs_rmdir\022\014.afs.Request\032\020.afs.Statu"
+    "sReply\"\000\022-\n\tafs_mkdir\022\014.afs.Request\032\020.af"
+    "s.StatusReply\"\000\022.\n\nafs_unlink\022\014.afs.Requ"
+    "est\032\020.afs.StatusReply\"\000\0224\n\nafs_rename\022\022."
+    "afs.RenameRequest\032\020.afs.StatusReply\"\000B\017\n"
+    "\007ex.grpc\242\002\003AFSb\006proto3", 982);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "afs.proto", &protobuf_RegisterTypes);
   Request::default_instance_ = new Request();
@@ -610,6 +613,7 @@ void Request::clear_name() {
 
 #ifndef _MSC_VER
 const int Reply::kDataFieldNumber;
+const int Reply::kSizeFieldNumber;
 #endif  // !_MSC_VER
 
 Reply::Reply()
@@ -635,6 +639,7 @@ void Reply::SharedCtor() {
   ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
   data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  size_ = 0;
 }
 
 Reply::~Reply() {
@@ -675,6 +680,7 @@ Reply* Reply::New(::google::protobuf::Arena* arena) const {
 
 void Reply::Clear() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  size_ = 0;
 }
 
 bool Reply::MergePartialFromCodedStream(
@@ -692,6 +698,21 @@ bool Reply::MergePartialFromCodedStream(
         if (tag == 10) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_data()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_size;
+        break;
+      }
+
+      // optional int32 size = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_size:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &size_)));
+
         } else {
           goto handle_unusual;
         }
@@ -729,6 +750,11 @@ void Reply::SerializeWithCachedSizes(
       1, this->data(), output);
   }
 
+  // optional int32 size = 2;
+  if (this->size() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->size(), output);
+  }
+
   // @@protoc_insertion_point(serialize_end:afs.Reply)
 }
 
@@ -740,6 +766,11 @@ void Reply::SerializeWithCachedSizes(
     target =
       ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
         1, this->data(), target);
+  }
+
+  // optional int32 size = 2;
+  if (this->size() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->size(), target);
   }
 
   // @@protoc_insertion_point(serialize_to_array_end:afs.Reply)
@@ -754,6 +785,13 @@ int Reply::ByteSize() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::BytesSize(
         this->data());
+  }
+
+  // optional int32 size = 2;
+  if (this->size() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->size());
   }
 
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
@@ -780,6 +818,9 @@ void Reply::MergeFrom(const Reply& from) {
 
     data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
   }
+  if (from.size() != 0) {
+    set_size(from.size());
+  }
 }
 
 void Reply::CopyFrom(const ::google::protobuf::Message& from) {
@@ -805,6 +846,7 @@ void Reply::Swap(Reply* other) {
 }
 void Reply::InternalSwap(Reply* other) {
   data_.Swap(&other->data_);
+  std::swap(size_, other->size_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -861,6 +903,20 @@ void Reply::clear_data() {
   }
   data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
   // @@protoc_insertion_point(field_set_allocated:afs.Reply.data)
+}
+
+// optional int32 size = 2;
+void Reply::clear_size() {
+  size_ = 0;
+}
+ ::google::protobuf::int32 Reply::size() const {
+  // @@protoc_insertion_point(field_get:afs.Reply.size)
+  return size_;
+}
+ void Reply::set_size(::google::protobuf::int32 value) {
+  
+  size_ = value;
+  // @@protoc_insertion_point(field_set:afs.Reply.size)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -2421,6 +2477,7 @@ DirentReply::dirent() const {
 #ifndef _MSC_VER
 const int FlushRequest::kPathFieldNumber;
 const int FlushRequest::kDataFieldNumber;
+const int FlushRequest::kSizeFieldNumber;
 #endif  // !_MSC_VER
 
 FlushRequest::FlushRequest()
@@ -2447,6 +2504,7 @@ void FlushRequest::SharedCtor() {
   _cached_size_ = 0;
   path_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  size_ = 0;
 }
 
 FlushRequest::~FlushRequest() {
@@ -2489,6 +2547,7 @@ FlushRequest* FlushRequest::New(::google::protobuf::Arena* arena) const {
 void FlushRequest::Clear() {
   path_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  size_ = 0;
 }
 
 bool FlushRequest::MergePartialFromCodedStream(
@@ -2523,6 +2582,21 @@ bool FlushRequest::MergePartialFromCodedStream(
          parse_data:
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_data()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(24)) goto parse_size;
+        break;
+      }
+
+      // optional int32 size = 3;
+      case 3: {
+        if (tag == 24) {
+         parse_size:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &size_)));
+
         } else {
           goto handle_unusual;
         }
@@ -2570,6 +2644,11 @@ void FlushRequest::SerializeWithCachedSizes(
       2, this->data(), output);
   }
 
+  // optional int32 size = 3;
+  if (this->size() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->size(), output);
+  }
+
   // @@protoc_insertion_point(serialize_end:afs.FlushRequest)
 }
 
@@ -2594,6 +2673,11 @@ void FlushRequest::SerializeWithCachedSizes(
         2, this->data(), target);
   }
 
+  // optional int32 size = 3;
+  if (this->size() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->size(), target);
+  }
+
   // @@protoc_insertion_point(serialize_to_array_end:afs.FlushRequest)
   return target;
 }
@@ -2613,6 +2697,13 @@ int FlushRequest::ByteSize() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::BytesSize(
         this->data());
+  }
+
+  // optional int32 size = 3;
+  if (this->size() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->size());
   }
 
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
@@ -2643,6 +2734,9 @@ void FlushRequest::MergeFrom(const FlushRequest& from) {
 
     data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
   }
+  if (from.size() != 0) {
+    set_size(from.size());
+  }
 }
 
 void FlushRequest::CopyFrom(const ::google::protobuf::Message& from) {
@@ -2669,6 +2763,7 @@ void FlushRequest::Swap(FlushRequest* other) {
 void FlushRequest::InternalSwap(FlushRequest* other) {
   path_.Swap(&other->path_);
   data_.Swap(&other->data_);
+  std::swap(size_, other->size_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -2768,6 +2863,20 @@ void FlushRequest::clear_data() {
   }
   data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
   // @@protoc_insertion_point(field_set_allocated:afs.FlushRequest.data)
+}
+
+// optional int32 size = 3;
+void FlushRequest::clear_size() {
+  size_ = 0;
+}
+ ::google::protobuf::int32 FlushRequest::size() const {
+  // @@protoc_insertion_point(field_get:afs.FlushRequest.size)
+  return size_;
+}
+ void FlushRequest::set_size(::google::protobuf::int32 value) {
+  
+  size_ = value;
+  // @@protoc_insertion_point(field_set:afs.FlushRequest.size)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
