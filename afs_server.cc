@@ -78,6 +78,11 @@ class AFSServiceImpl final : public AFS::Service {
 		char *buffer = new char [BUF_LEN];
 
 		file_stream.open(afs_root + request->name());
+		
+		// wait if file is being written
+		std::string lockfile = (afs_root + request->name() + ".lock");
+		int fd = open(lockfile.c_str(), O_WRONLY | O_CREAT);
+		flock(fd, LOCK_SH);
 
 		while (!file_stream.eof()) {
 
@@ -88,6 +93,10 @@ class AFSServiceImpl final : public AFS::Service {
 		}
 
 		file_stream.close();
+		// unlock and cleanup
+		flock(fd, LOCK_UN);
+		close(fd);
+		unlink(lockfile.c_str());
 
 		return Status::OK;
 	}
@@ -171,7 +180,6 @@ class AFSServiceImpl final : public AFS::Service {
 
 		std::string path = afs_root + request.path();
 		std::string lockfile = path + ".lock";
-		// busy wait if file exists
 		int fd = open(lockfile.c_str(), O_WRONLY | O_CREAT);
 		flock(fd, LOCK_EX);
 	

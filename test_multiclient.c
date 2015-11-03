@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <stdlib.h>
+#include <sys/types.h>
 
 #define BUF_LEN 1024
 #define THREADS 5
@@ -10,6 +11,7 @@ void perform_read(char *filename)
 	int fd = open(filename, O_RDONLY);
 	char buffer[BUF_LEN];
 	int size = read(fd, buffer, BUF_LEN);
+	printf("%d - %s\n", getttid(), buffer);
 	close(fd);
 }
 

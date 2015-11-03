@@ -251,10 +251,18 @@ static int afs_read(const char *path, char *buf, size_t size, off_t offset,
 	int res;
 	(void) fi;
 	char prefixed_path[1024];
-	
+	char temp_path[1024];
 	strcpy(prefixed_path, cache_path);
 	strcat(prefixed_path, path);
-	fd = open(prefixed_path, O_RDONLY);
+	strcpy(temp_path, prefixed_path);
+	strcat(temp_path, ".tmp");
+	
+	// service read from temp file if it exists
+	int tmp_fd = open(temp_path, O_RDONLY);
+	if (tmp_fd != -1)
+		fd = tmp_fd;
+	else
+		fd = open(prefixed_path, O_RDONLY);
 
 	if (fd == -1)
 		return -errno;
@@ -303,10 +311,18 @@ static int afs_flush(const char *path, struct fuse_file_info *fi)
 	/*if ((fi->flags & O_RDONLY) == O_RDONLY){
 	  printf("\nReturning from flush without grpc");
 	  return res;
-	  }
-	  char prefixed_path[1024];
-	  strcpy(prefixed_path, "/tmp/cache");
-	  strcat(prefixed_path, path);*/
+	  }*/
+	char prefixed_path[1024];
+	strcpy(prefixed_path, cache_path);
+	strcat(prefixed_path, path);
+	char temp_path[1024];
+	strcpy(temp_path, prefixed_path);
+	strcat(temp_path, ".tmp");
+
+	if (open(temp_path, O_RDONLY) == -1)
+		return -1;
+
+	rename(temp_path, prefixed_path);
 
 	printf("\nCalling grpc flush on file: %s\n",path);
 

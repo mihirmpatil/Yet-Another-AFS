@@ -79,8 +79,7 @@ public:
 
 		//Local AFS cache file handling
 		std::ofstream file_stream;
-		// TODO handle directory structure if it doesnt exist inside the cache
-		file_stream.open(cache_path + path);
+		file_stream.open(cache_path + path + ".tmp");
 
 		// The actual RPC.
 		std::cout << "The actual GRPC for " << cache_path + path << std::endl;
