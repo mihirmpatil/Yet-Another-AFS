@@ -272,7 +272,7 @@ void protobuf_AddDesc_afs_2eproto() {
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\tafs.proto\022\003afs\"\027\n\007Request\022\014\n\004name\030\001 \001("
-    "\t\"\025\n\005Reply\022\014\n\004data\030\001 \001(\t\"\307\001\n\004Stat\022\013\n\003dev"
+    "\t\"\025\n\005Reply\022\014\n\004data\030\001 \001(\014\"\307\001\n\004Stat\022\013\n\003dev"
     "\030\001 \001(\005\022\013\n\003ino\030\002 \001(\005\022\014\n\004mode\030\003 \001(\005\022\r\n\005nli"
     "nk\030\004 \001(\005\022\013\n\003uid\030\005 \001(\005\022\013\n\003gid\030\006 \001(\005\022\014\n\004rd"
     "ev\030\007 \001(\005\022\014\n\004size\030\010 \001(\003\022\016\n\006a_time\030\t \001(\003\022\016"
@@ -687,15 +687,11 @@ bool Reply::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional string data = 1;
+      // optional bytes data = 1;
       case 1: {
         if (tag == 10) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_data()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->data().data(), this->data().length(),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "afs.Reply.data"));
         } else {
           goto handle_unusual;
         }
@@ -727,13 +723,9 @@ failure:
 void Reply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:afs.Reply)
-  // optional string data = 1;
+  // optional bytes data = 1;
   if (this->data().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->data().data(), this->data().length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "afs.Reply.data");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
       1, this->data(), output);
   }
 
@@ -743,14 +735,10 @@ void Reply::SerializeWithCachedSizes(
 ::google::protobuf::uint8* Reply::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:afs.Reply)
-  // optional string data = 1;
+  // optional bytes data = 1;
   if (this->data().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->data().data(), this->data().length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "afs.Reply.data");
     target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
         1, this->data(), target);
   }
 
@@ -761,10 +749,10 @@ void Reply::SerializeWithCachedSizes(
 int Reply::ByteSize() const {
   int total_size = 0;
 
-  // optional string data = 1;
+  // optional bytes data = 1;
   if (this->data().size() > 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
         this->data());
   }
 
@@ -832,7 +820,7 @@ void Reply::InternalSwap(Reply* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // Reply
 
-// optional string data = 1;
+// optional bytes data = 1;
 void Reply::clear_data() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -850,7 +838,7 @@ void Reply::clear_data() {
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:afs.Reply.data)
 }
- void Reply::set_data(const char* value, size_t size) {
+ void Reply::set_data(const void* value, size_t size) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));

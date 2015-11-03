@@ -3,9 +3,12 @@
 
 int main()
 {
-	int fd = open("/tmp/afs/test_file", O_RDWR | O_CREAT);
+	int fd = open("/tmp/afs/test_dir/foo/bar/file", O_RDWR | O_CREAT);
 	if (fd == -1)
 		printf("open call failed\n");
+	
+	//char x;
+	//scanf("%c",&x);
 	char buf[5];
 	buf[0] = '1';
 	buf[1] = '2';

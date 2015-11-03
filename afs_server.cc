@@ -43,6 +43,7 @@
 #include "sys/stat.h"
 #include "unistd.h"
 #include "sys/types.h"
+#include "sys/file.h"
 
 #define BUF_LEN 1024
 
@@ -169,6 +170,11 @@ class AFSServiceImpl final : public AFS::Service {
 		reader->Read(&request);
 
 		std::string path = afs_root + request.path();
+		std::string lockfile = path + ".lock";
+		// busy wait if file exists
+		int fd = open(lockfile.c_str(), O_WRONLY | O_CREAT);
+		flock(fd, LOCK_EX);
+	
 		std::ofstream file_stream;
 		std::string file_data;
 
@@ -185,6 +191,11 @@ class AFSServiceImpl final : public AFS::Service {
 		std::cout<<"\nFinished writing the file";
 
 		file_stream.close();
+		// release lock and clean up
+		flock(fd, LOCK_UN);
+		close(fd);
+		unlink(lockfile.c_str());
+
 		response->set_status(0);
 		return Status::OK;
 	}
@@ -258,7 +269,7 @@ int main(int argc, char* argv[]) {
 
 	if(afs_root[afs_root.length()-1] == '/'){
 		afs_root = afs_root.substr(0,afs_root.length()-1);
-		afs_root = "";
+		//afs_root = "";
 	}
 
 	RunServer();

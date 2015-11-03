@@ -187,13 +187,13 @@ class Reply : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // optional string data = 1;
+  // optional bytes data = 1;
   void clear_data();
   static const int kDataFieldNumber = 1;
   const ::std::string& data() const;
   void set_data(const ::std::string& value);
   void set_data(const char* value);
-  void set_data(const char* value, size_t size);
+  void set_data(const void* value, size_t size);
   ::std::string* mutable_data();
   ::std::string* release_data();
   void set_allocated_data(::std::string* data);
@@ -963,7 +963,7 @@ inline void Request::set_allocated_name(::std::string* name) {
 
 // Reply
 
-// optional string data = 1;
+// optional bytes data = 1;
 inline void Reply::clear_data() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -981,7 +981,7 @@ inline void Reply::set_data(const char* value) {
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:afs.Reply.data)
 }
-inline void Reply::set_data(const char* value, size_t size) {
+inline void Reply::set_data(const void* value, size_t size) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
