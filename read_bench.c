@@ -22,7 +22,7 @@ int main()
 	int i, fd;
 	const int buf_size = 1024;
 	char buffer[buf_size];
-	int trials = 1;
+	int trials = 10;
 	for (i = 0; i < trials; i++)
 	{
 		clock_gettime(CLOCK_REALTIME, &start);
@@ -45,10 +45,12 @@ int main()
 		clock_gettime(CLOCK_REALTIME, &start);
 		read(fd, buffer, buf_size);	
 		clock_gettime(CLOCK_REALTIME, &end);
-		printf("Time for next open of %s - %llu\n", filename, (long long unsigned int)time_diff(start,end));
+		printf("Time for read of %s - %llu\n", filename, (long long unsigned int)time_diff(start,end));
 		close(fd);
 
 		// remove cached copy
+		char x;
+		scanf("%c",&x);
 		unlink(cached_filename);
 	}
 	return 0;
