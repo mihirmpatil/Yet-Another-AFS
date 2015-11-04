@@ -340,7 +340,8 @@ static int afs_flush(const char *path, struct fuse_file_info *fi)
 	if (lstat(temp_path, stbuf) == -1)
 	{
 		printf("\nTemp file does not exist! returning -1\n");
-		return -1;
+		if (lstat(prefixed_path, stbuf) != -1)
+			return grpc_afs_flush(path);
 	}
 
 	rename(temp_path, prefixed_path);

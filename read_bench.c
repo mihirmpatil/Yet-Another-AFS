@@ -23,12 +23,19 @@ int main()
 	const int buf_size = 1024;
 	char buffer[buf_size];
 	int trials = 10;
+	char *readtimes = "results/readtimes.txt";
+	char *remoteopentimes = "results/remoteopentimes.txt";
+	char *localopentimes = "results/localopentimes.txt";
+//	FILE *readfd = fopen(readtimes, "w+");
+//	FILE *localopenfd = fopen(localopentimes, "w+");
+//	FILE *remoteopenfd = fopen(remoteopentimes, "w+");
 	for (i = 0; i < trials; i++)
 	{
 		clock_gettime(CLOCK_REALTIME, &start);
 		fd = open(filename, O_RDONLY);
 		clock_gettime(CLOCK_REALTIME, &end);
 		printf("Time for first open of %s - %llu\n", filename, (long long unsigned int)time_diff(start,end));
+		write
 		if (fd == -1)
 			exit(1);
 		close(fd);

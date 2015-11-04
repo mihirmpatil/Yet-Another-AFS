@@ -294,7 +294,7 @@ private:
 extern "C" int grpc_afs_open(const char *path) {
 	std::cout << "In exported open implementation " << std::endl;
 	AFSClient client(
-					 grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+					 grpc::CreateChannel("10.10.1.1:50051", grpc::InsecureCredentials()));
 	std::string r = client.afs_open(path);
 	std::cout << r << std::endl;
 	return 0;
@@ -302,48 +302,48 @@ extern "C" int grpc_afs_open(const char *path) {
 
 extern "C" struct afs_dirent_array grpc_afs_readdir(const char *path) {
 	AFSClient client(
-					 grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+					 grpc::CreateChannel("10.10.1.1:50051", grpc::InsecureCredentials()));
 	struct afs_dirent_array r = client.afs_readdir(path);
 	return r;
 }
 
 extern "C" int grpc_afs_getattr(const char *path, struct stat **s, const char *cache_path) {
 	AFSClient client(
-					 grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+					 grpc::CreateChannel("10.10.1.1:50051", grpc::InsecureCredentials()));
 	return client.afs_getattr(path, s, cache_path);
 }
 
 extern "C" int grpc_afs_flush(const char *path) {
 	AFSClient client(
-					 grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+					 grpc::CreateChannel("10.10.1.1:50051", grpc::InsecureCredentials()));
 	int s = client.afs_flush(path);
 	return s;
 }
 
 extern "C" int grpc_afs_mkdir(const char *path) {
 	AFSClient client(
-					 grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+					 grpc::CreateChannel("10.10.1.1:50051", grpc::InsecureCredentials()));
 	int s = client.afs_mkdir(path);
 	return s;
 }
 
 extern "C" int grpc_afs_rmdir(const char *path) {
 	AFSClient client(
-					 grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+					 grpc::CreateChannel("10.10.1.1:50051", grpc::InsecureCredentials()));
 	int s = client.afs_rmdir(path);
 	return s;
 }
 
 extern "C" int grpc_afs_unlink(const char *path) {
 	AFSClient client(
-					 grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+					 grpc::CreateChannel("10.10.1.1:50051", grpc::InsecureCredentials()));
 	int s = client.afs_unlink(path);
 	return s;
 }
 
 extern "C" int grpc_afs_rename(const char *from, const char *to) {
 	AFSClient client(
-					 grpc::CreateChannel("localhost:50051", grpc::InsecureCredentials()));
+					 grpc::CreateChannel("10.10.1.1:50051", grpc::InsecureCredentials()));
 	int s = client.afs_rename(from, to);
 	return s;
 }
