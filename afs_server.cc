@@ -219,7 +219,8 @@ class AFSServiceImpl final : public AFS::Service {
 
 		while (reader->Read(&request)) {
 			file_data = request.data().substr(0,request.size());
-			std::cout<<"\nWriting data:"<<file_data;
+			//std::cout<<"\nSize:"<<request.size()<<"\n";
+			//std::cout<<"\nData:"<<request.data()<<"\n";
 			file_stream << file_data;
 		}
 

@@ -6,10 +6,10 @@
 
 int main()
 {
-	char *filename = "/tmp/server/bench/bench_file1";
+	char *filename = "/tmp/server/bench/bench_file2";
 	int fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC);
 	
-	int size = 10*KB;
+	int size = 1*KB*KB*KB;
 
 	int i;
 	for (i = 0; i < size; i++)

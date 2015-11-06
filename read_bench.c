@@ -35,7 +35,6 @@ int main()
 		fd = open(filename, O_RDONLY);
 		clock_gettime(CLOCK_REALTIME, &end);
 		printf("Time for first open of %s - %llu\n", filename, (long long unsigned int)time_diff(start,end));
-		write
 		if (fd == -1)
 			exit(1);
 		close(fd);
