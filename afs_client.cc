@@ -96,8 +96,8 @@ public:
 			file_stream << reply.data().substr(0,buffersize); //, BUF_LEN);
 
 			count += reply.size();
-			std::cout << "in afs_open on client side \n" << reply.data() << std::endl;
-			std::cout << "length of current data : " << buffersize << std::endl;
+			//std::cout << "in afs_open on client side \n" << reply.data() << std::endl;
+			//std::cout << "length of current data : " << buffersize << std::endl;
 		}
 
 		std::cout<<"\nTotal len = "<<count<<std::endl;
@@ -213,22 +213,19 @@ public:
 				currBufferLen = filesize-count;
 			}
 
-			std::cout<<"\nCurrbuffer = "<<currBufferLen<<std::endl;
+			//std::cout<<"\nCurrbuffer = "<<currBufferLen<<std::endl;
 
 			buffer = new char[currBufferLen + 1];
 			file_stream.read(buffer, currBufferLen);
-			//char *buf2 = new char[currBufferLen + 1];
-			//read(fd, buf2, currBufferLen);
-			//std::cout << "C style read buffer - " << buf2 << std::endl;
 			count += currBufferLen;
 
 			std::string file_data = std::string(buffer);
-			std::cout<<"\nWriting data: "<<buffer<<std::endl;
-			std::cout<<"\nlength: "<<file_data.length()<<std::endl;
+			//std::cout<<"\nWriting data: "<<buffer<<std::endl;
+			//std::cout<<"\nlength: "<<file_data.length()<<",count: "<<count<<std::endl;
 			request.set_data(file_data);
 			request.set_size(currBufferLen);
 			writer->Write(request);			
-			std::cout<<"Data written to server";
+			//std::cout<<"Data written to server";
 			delete[] buffer;
 
 		}

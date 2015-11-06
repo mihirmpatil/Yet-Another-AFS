@@ -3,7 +3,8 @@
 
 int main()
 {
-	int fd = open("tmp/client/random_file", O_RDWR | O_CREAT);
+	int fd = open("/tmp/afs/filetemp", O_RDONLY);
 	printf("open succeeded\n");
+	close(fd);
 	return 0;
 }
