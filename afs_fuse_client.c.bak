@@ -172,18 +172,6 @@ static int afs_open(const char *path, struct fuse_file_info *fi)
 	strcpy(prefixed_path, cache_path);
 	strcat(prefixed_path, path);
 
-	char temp_path[1024];
-	strcpy(temp_path, prefixed_path);
-	strcat(temp_path, ".tmp");
-	int fd;
-	if ((fd = open(temp_path, O_RDONLY)) != -1)
-	{
-		char backup_name[1024];
-		strcpy(backup_name, temp_path);
-		strcat(backup_name, ".bkp");
-		rename(temp_path, backup_name);
-		close(fd);
-	}
 	struct stat *stbuf = (struct stat*)malloc(sizeof(struct stat));
 	struct stat *stbuf2 = (struct stat*)malloc(sizeof(struct stat));
 
@@ -231,128 +219,18 @@ static int afs_open(const char *path, struct fuse_file_info *fi)
 			unlink(prefixed_path);
 			grpc_afs_open(path);
 		}
-		else{
-			int res = open(prefixed_path,O_RDWR | O_CREAT);
-			if (res == -1)
-                return -errno;
-			close(res);
-			return 0;
-		}
+		else
+			open(prefixed_path,O_RDWR | O_CREAT);
 	}
 	// file doesn't exist anywhere
 	else if (local_ret == -1 && remote_ret == -1){
 		printf("\nFile does not exist anywhere");
-		int res = open(prefixed_path, O_RDWR | O_CREAT, S_IRWXU);
-		if (res == -1)
-			return -errno;
-		close(res);
-		return 0;
+		open(prefixed_path, O_RDWR | O_CREAT, S_IRWXU);
 	}
 	// file only exists locally
 	else if (local_ret != -1 && remote_ret == -1){
 		printf("\nFile exists only locally");
-		int res = open(prefixed_path, O_RDWR, S_IRWXU);
-		if (res == -1)
-			return -errno;
-		close(res);
-		return 0;
-	}
-	// file only exists on server
-	else if (local_ret == -1 && remote_ret != -1){
-		printf("\nFile exists only in the server");
-		grpc_afs_open(path);
-	}
-	else
-		return -1;
-	
-	printf("In afs_open inside fuse client for %s\n",prefixed_path);
-	return SUCCESS;
-}
-
-static int afs_create(const char *path, mode_t mode, struct fuse_file_info *fi){
-	char prefixed_path[1024];
-	int s_hierarchy_depth, actual_depth,i;
-	char split_paths[100][256];
-
-	for(i=0;i<100;i++)
-		memset(split_paths[i],'\0',256*sizeof(char));
-
-	strcpy(prefixed_path, cache_path);
-	strcat(prefixed_path, path);
-
-	struct stat *stbuf = (struct stat*)malloc(sizeof(struct stat));
-	struct stat *stbuf2 = (struct stat*)malloc(sizeof(struct stat));
-
-	// Check in remote if the directory hierarchy exists
-	s_hierarchy_depth = existsInServer(path, cache_path);
-	actual_depth = getDepth(path);
-	getSplitPaths(path, cache_path, split_paths);
-
-	printf("\n******************In create function");
-	printf("\nActual Depth: %d, Server_Hierarchy_depth: %d",actual_depth,s_hierarchy_depth);
-	for(i=0;i<actual_depth;i++){
-		printf("\nSplitpath: %d = %s",i,split_paths[i]);
-	}
-
-	// Expected directory hierarchy is present in server
-	if(actual_depth == s_hierarchy_depth){
-
-		for(i=0;i<actual_depth;i++){
-			// Make directory in local if it does not exist
-			if(lstat(split_paths[i], stbuf) == -1){
-				mkdir(split_paths[i], S_IRWXU);
-			}
-		}
-	}
-	else{
-		// The directory structure does not exist in server
-		// Remove any exisiting directories
-		strcpy(prefixed_path,"rm -r -f ");
-		strcat(prefixed_path,split_paths[s_hierarchy_depth]);
-
-		printf("\nRemoving command = %s",prefixed_path);
-		system(prefixed_path);
-		return -1;
-	}
-
-	strcpy(prefixed_path, cache_path);
-	strcat(prefixed_path, path);
-
-	int local_ret = lstat(prefixed_path, stbuf);
-	int remote_ret = grpc_afs_getattr(path, &stbuf2, cache_path);
-
-	// file exists on both server and client
-	if (local_ret != -1 && remote_ret != -1){
-		// check if client has latest, otherwise fetch from server
-		if (stbuf->st_mtime < stbuf2->st_mtime){
-			unlink(prefixed_path);
-			grpc_afs_open(path);
-		}
-		else{
-			int res = open(prefixed_path,O_RDWR | O_CREAT);
-			if (res == -1)
-                return -errno;
-			close(res);
-			return 0;
-		}
-	}
-	// file doesn't exist anywhere
-	else if (local_ret == -1 && remote_ret == -1){
-		printf("\nFile does not exist anywhere");
-		int res = open(prefixed_path, O_RDWR | O_CREAT, S_IRWXU);
-		if (res == -1)
-			return -errno;
-		close(res);
-		return 0;
-	}
-	// file only exists locally
-	else if (local_ret != -1 && remote_ret == -1){
-		printf("\nFile exists only locally");
-		int res = open(prefixed_path, O_RDWR | O_CREAT, S_IRWXU);
-		if (res == -1)
-			return -errno;
-		close(res);
-		return 0;
+		open(prefixed_path, O_RDWR | O_CREAT, S_IRWXU);
 	}
 	// file only exists on server
 	else if (local_ret == -1 && remote_ret != -1){
@@ -415,9 +293,9 @@ static int afs_write(const char *path, const char *buf, size_t size,
 	strcat(temp_path, ".tmp");
 
 	printf("\nThe file opened for writing is: %s\n",prefixed_path);
-	//printf("\nBuff: %s\nsize: %d\noffset: %d\n",buf,(int)size,(int)offset);
+	printf("\nBuff: %s\nsize: %d\noffset: %d\n",buf,(int)size,(int)offset);
 
-	fd = open(temp_path, O_WRONLY | O_CREAT , S_IRWXU);
+	fd = open(temp_path, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
 	// copy contents of the original file
 	int file_fd = open(prefixed_path, O_RDONLY);
 	if (file_fd != -1)
@@ -427,7 +305,6 @@ static int afs_write(const char *path, const char *buf, size_t size,
 		int numRead;
 		while ((numRead = read(file_fd, buffer, BUF_LEN)) > 0)
 			write(fd, buffer, numRead);
-		close(file_fd);
 	}
 
 	if (fd == -1){
@@ -448,10 +325,10 @@ static int afs_flush(const char *path, struct fuse_file_info *fi)
 {
 	int res = 0;
 	// upload file to server always (maybe check for O_RDONLY) 
-	if((fi->flags & O_RDONLY) != 0){
+	/*if ((fi->flags & O_RDONLY) == O_RDONLY){
 	  printf("\nReturning from flush without grpc");
 	  return res;
-	}
+	  }*/
 	char prefixed_path[1024];
 	strcpy(prefixed_path, cache_path);
 	strcat(prefixed_path, path);
@@ -462,11 +339,9 @@ static int afs_flush(const char *path, struct fuse_file_info *fi)
 	struct stat *stbuf = (struct stat*)malloc(sizeof(struct stat));
 	if (lstat(temp_path, stbuf) == -1)
 	{
-		printf("\nTemp file does not exist!\n");
-		if (lstat(prefixed_path, stbuf) != -1){
-			printf("\nActual file exists");
+		printf("\nTemp file does not exist! returning -1\n");
+		if (lstat(prefixed_path, stbuf) != -1)
 			return grpc_afs_flush(path);
-		}
 	}
 
 	rename(temp_path, prefixed_path);
@@ -642,7 +517,6 @@ static struct fuse_operations afs_oper = {
 	.chown= afs_chown,
 	.truncate = afs_truncate,
 	.utimens = afs_utimens,
-	.create = afs_create,
 };
 
 int main(int argc, char *argv[]) {

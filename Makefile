@@ -55,7 +55,8 @@ afs_fuse_client:	afs.pb.o afs.grpc.pb.o afs_client.o
 
 bench: 
 	gcc read_bench.c -o read_bench 
-	gcc write_bench.c -o write_bench 
+	gcc write_bench.c -o write_bench
+	gcc test_multiclient.c -o multiclient -pthread
 	
 afs_fuse_obj:	
 	gcc -c afs_fuse_client.c $(FUSEFLAGS)
@@ -71,7 +72,7 @@ tester: test_open.c
 	gcc test_open.c -o test_open	
 
 clean:
-	rm -f *.o afs_server afs_fuse_client read_bench write_bench
+	rm -f *.o afs_server afs_fuse_client read_bench write_bench multiclient
 
 
 # The following is to test your system and ensure a smoother experience.
